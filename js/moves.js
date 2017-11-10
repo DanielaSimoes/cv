@@ -348,35 +348,6 @@ function outputInfos(){
 //----------------------------------------------------------------------------
 
 function setEventListeners(){
-	
-	// NEW --- Dropdown list
-	
-	var list = document.getElementById("rendering-mode-selection");
-	
-	list.addEventListener("click", function(){
-				
-		// Getting the selection
-		
-		var mode = list.selectedIndex;
-				
-		switch(mode){
-			
-			case 0 : primitiveType = gl.TRIANGLES;
-				break;
-			
-			case 1 : primitiveType = gl.LINE_LOOP;
-				break;
-			
-			case 2 : primitiveType = gl.POINTS;
-				break;
-		}
-		
-		// Rendering
-		
-		drawScene();  
-			
-	});      
-
 
 	// Button events
 	
