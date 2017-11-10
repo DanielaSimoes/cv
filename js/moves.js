@@ -377,7 +377,7 @@ function setEventListeners(){
 			
 	});      
 
-	
+
 	// Button events
 	
 	document.getElementById("move-left-button").onclick = function(){
