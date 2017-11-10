@@ -290,10 +290,6 @@ function drawScene() {
 	
 	// Pay attention to the matrix multiplication order!!
 	
-	// First transformation ?
-	
-	// Last transformation ?
-	
 	var mvMatrix = mult( rotationZZMatrix( angleZZ ), 
 	
 						 scalingMatrix( sx, sy, sz ) );
@@ -313,16 +309,8 @@ function drawScene() {
 	// Drawing the contents of the vertex buffer
 	
 	// primitiveType allows drawing as filled triangles / wireframe / vertices
-	
-	// What are the possible values for the primitiveType variable?
-	
+
 	if(primitiveType == gl.LINE_LOOP) {
-		
-		// To simulate wireframe drawing!
-		
-		// No faces are defined! There are no hidden lines!
-		
-		// Taking the vertices 3 by 3 and drawing a LINE_LOOP
 
 		var i = 0;
 		for (i=0; i<triangleVertexPositionBuffer.numItems/3; i++){
@@ -349,51 +337,44 @@ function outputInfos(){
 
 function setEventListeners(){
 
+	document.addEventListener("keydown", function(event){
+
+		// Getting the pressed key
+
+		// Updating rec. depth and drawing again
+
+		var key = event.keyCode; // ASCII
+
+		switch(key){
+			case 38 :
+
+                ty += 0.25;
+                drawScene();
+                break;
+
+			case 40 :
+
+                ty -= 0.25;
+                drawScene();
+                break;
+
+			case 37:
+
+                tx -= 0.25;
+                drawScene();
+                break;
+
+			case 39:
+
+                tx += 0.25;
+                drawScene();
+                break;
+
+		}
+	});
+
+
 	// Button events
-	
-	document.getElementById("move-left-button").onclick = function(){
-		
-		// Updating
-		
-		tx -= 0.25;
-		
-		// Render the viewport
-		
-		drawScene();  
-	};
-
-	document.getElementById("move-right-button").onclick = function(){
-		
-		// Updating
-		
-		tx += 0.25;
-						
-		// Render the viewport
-		
-		drawScene();  
-	};      
-
-	document.getElementById("move-up-button").onclick = function(){
-		
-		// Updating
-		
-		ty += 0.25;
-						
-		// Render the viewport
-		
-		drawScene();  
-	};      
-
-	document.getElementById("move-down-button").onclick = function(){
-		
-		// Updating
-		
-		ty -= 0.25;
-		
-		// Render the viewport
-		
-		drawScene();  
-	};      
 
 	document.getElementById("scale-up-button").onclick = function(){
 		
