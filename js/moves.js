@@ -516,23 +516,7 @@ function setEventListeners(){
 		// Render the viewport
 		
 		drawScene();  
-	};      
-
-	document.getElementById("face-culling-button").onclick = function(){
-		
-		if( gl.isEnabled( gl.CULL_FACE ) )
-		{
-			gl.disable( gl.CULL_FACE );
-		}
-		else
-		{
-			gl.enable( gl.CULL_FACE );
-		}
-		
-		// Render the viewport
-		
-		drawScene();  
-	};      
+	};
 }
 
 //----------------------------------------------------------------------------
