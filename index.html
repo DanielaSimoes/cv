@@ -16,7 +16,7 @@
 
 </head>
 
-<body onload="runWebGL();">
+<body>
 
     <div class="container-fluid">
 
@@ -48,7 +48,7 @@
             </div>
             <div class="col-lg-8">
                 <div style="text-align: center">
-                    <canvas id="my-canvas" style="border:1px solid #000000;" width="550" height="550"></canvas>
+                    <canvas id="webgl-id" style="border:1px solid #000000;" width="550" height="550"></canvas>
                 </div>
             </div>
         </div>
@@ -59,13 +59,16 @@
 
     <!-- WebGL code -->
 
-	<script id="shader-vs" type="x-shader/x-vertex">
+
+    <script id="shader-vs" type="x-shader/x-vertex">
 
         attribute vec3 aVertexPosition;
 
         attribute vec3 aVertexColor;
 
         uniform mat4 uMVMatrix;
+
+        uniform mat4 uPMatrix;
 
         varying vec4 vertexColor;
 
@@ -77,9 +80,9 @@
 
             // Just converting the (x,y,z) vertices to Homogeneous Coord.
 
-            // And multiplying by the Model-View matrix
+            // And multiplying by the Projection and the Model-View matrix
 
-            gl_Position = uMVMatrix * vec4(aVertexPosition, 1.0);
+            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 
             // Converting the RGB color value to RGBA
 
@@ -106,13 +109,18 @@
 
     <script type="text/javascript" src="js/maths.js"></script>
     <script type="text/javascript" src="js/initShaders.js"></script>
-    <script type="text/javascript" src="js/moves.js"></script>
-    <script type="text/javascript" src="js/jquery-3.2.1.slim.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+
+    <!-- Some useful functions for browser compatibility -->
+    <script type="text/javascript" src="js/webgl-utils.js"></script>
+
     <script type="text/javascript" src="js/popper.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
-
-
-
+    <script type="text/javascript" src="js/cv/utils.js"></script>
+    <script type="text/javascript" src="js/cv/puzzle_definition.js"></script>
+    <script type="text/javascript" src="js/cv/piece.js"></script>
+    <script type="text/javascript" src="js/cv/puzzle_level.js"></script>
+    <script type="text/javascript" src="js/cv/puzzle_game.js"></script>
 
 </body>
 
