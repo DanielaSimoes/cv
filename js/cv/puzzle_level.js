@@ -25,7 +25,7 @@ function PuzzleLevel(level){
         var piece = this.puzzle_pieces[i];
         var result = parseTXTfile(piece.coordinates);
 
-        this.pieces[piece.title] = new Piece(this.gl, piece.init,
+        this.pieces[piece.title] = new Pieceabstract(this.gl, piece.init,
             result["vertices"].slice(),
             result["colors"].slice(),
             this.sx, this.sy, this.sz, this.globalTz);

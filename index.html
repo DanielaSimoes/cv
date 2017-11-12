@@ -16,7 +16,7 @@
 
 </head>
 
-<body>
+<body onload="runWebGL();">
 
     <div class="container-fluid">
 
@@ -59,69 +59,88 @@
 
     <!-- WebGL code -->
 
-
     <script id="shader-vs" type="x-shader/x-vertex">
+	    attribute vec3 aVertexPosition;
+	    attribute vec3 aVertexColor;
+	    uniform mat4 uMVMatrix;
+	    uniform mat4 uPMatrix;
+	    varying vec4 vertexColor;
 
-        attribute vec3 aVertexPosition;
+	    void main(void) {
+			// To allow seeing the points drawn
+			gl_PointSize = 5.0;
 
-        attribute vec3 aVertexColor;
+			// Just converting the (x,y,z) vertices to Homogeneous Coord.
+			// And multiplying by the Projection and the Model-View matrix
+	        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 
-        uniform mat4 uMVMatrix;
-
-        uniform mat4 uPMatrix;
-
-        varying vec4 vertexColor;
-
-        void main(void) {
-
-            // To allow seeing the points drawn
-
-            gl_PointSize = 5.0;
-
-            // Just converting the (x,y,z) vertices to Homogeneous Coord.
-
-            // And multiplying by the Projection and the Model-View matrix
-
-            gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-
-            // Converting the RGB color value to RGBA
-
-            vertexColor = vec4(aVertexColor, 1.0);
-        }
-    </script>
+	        // Converting the RGB color value to RGBA
+	        vertexColor = vec4(aVertexColor, 1.0);
+	    }
+	</script>
 
     <script id="shader-fs" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec4 vertexColor;
 
-        precision mediump float;
+		void main(void) {
+			// Using the passed vertex color
+			gl_FragColor = vertexColor;
+		}
+	</script>
 
-        varying vec4 vertexColor;
+    <script id="shader-vsback" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec2 aTextureCoord;
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+        varying vec2 vTextureCoord;
 
-        void main(void) {
+	    void main(void) {
+			// To allow seeing the points drawn
+			// Just converting the (x,y,z) vertices to Homogeneous Coord.
+			// And multiplying by the Projection and the Model-View matrix
+	        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 
-            // Using the passed vertex color
+	        // Converting the RGB color value to RGBA
+            vTextureCoord = aTextureCoord;
+	    }
+	</script>
 
-            gl_FragColor = vertexColor;
-        }
+    <script id="shader-fsback" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec2 vTextureCoord;
+        uniform sampler2D uSampler;
 
-    </script>
+		void main(void) {
+			// Using the passed vertex color
+			gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		}
+	</script>
 
     <!-- The JS files -->
-
-    <script type="text/javascript" src="js/maths.js"></script>
-    <script type="text/javascript" src="js/initShaders.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
 
     <!-- Some useful functions for browser compatibility -->
     <script type="text/javascript" src="js/webgl-utils.js"></script>
 
+    <!-- Handling vectors and matrices -->
+    <script type="text/javascript" src="js/maths.js"></script>
+
+    <!-- Processing triangle mesh models -->
+    <script type="text/javascript" src="js/cv/initShaders.js"></script>
+    <script type="text/javascript" src="js/cv/utils.js"></script>
+
+    <!-- WebGL code -->
+    <script type="text/javascript" src="js/cv/initShaders.js"></script>
+    <script type="text/javascript" src="js/cv/Models.class.js"></script>
+    <script type="text/javascript" src="js/cv/CanvasWebGl.class.js"></script>
+    <script type="text/javascript" src="js/cv/Puzzle.js"></script>
+    <script type="text/javascript" src="js/cv/PuzzleGame.js"></script>
+    <!-- end -->
+
     <script type="text/javascript" src="js/popper.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
-    <script type="text/javascript" src="js/cv/utils.js"></script>
-    <script type="text/javascript" src="js/cv/puzzle_definition.js"></script>
-    <script type="text/javascript" src="js/cv/piece.js"></script>
-    <script type="text/javascript" src="js/cv/puzzle_level.js"></script>
-    <script type="text/javascript" src="js/cv/puzzle_game.js"></script>
-
 </body>
 
 </html>
