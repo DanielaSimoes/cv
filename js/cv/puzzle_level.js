@@ -1,87 +1,105 @@
 function PuzzleLevel(level){
-    this.title = level.title;
-    this.puzzle_pieces = level.puzzle_pieces;
+	this.title = level.title;
+	this.puzzle_pieces = level.puzzle_pieces;
 
     // WebGL context
-    this.gl = null;
+	this.gl = null;
 
     // pieces array
-    this.pieces = {};
+	this.pieces = {};
 
-    // backgroud image
-    this.background = null;
+	// background
+	this.background = null;
 
-    // canvas
-    this.canvas = document.getElementById("webgl-id");
+	// canvas
+	this.canvas = document.getElementById("webgl-id");
 
     // reset puzzle values
-    this.resetPuzzle();
+	this.resetPuzzle();
 
     // init webgl
-    this.initWebGL();
+	this.initWebGL();
 
     // create pieces
-    for(var i=0; i<this.puzzle_pieces.length; i++){
-        var piece = this.puzzle_pieces[i];
-        var result = parseTXTfile(piece.coordinates);
+	for(var i=0; i<this.puzzle_pieces.length; i++){
+	    var result = parseTXTfile(this.puzzle_pieces[i].piece_url);
+        this.pieces[this.puzzle_pieces[i].id] = new Piece(this.gl, this.puzzle_pieces[i].init, i,
+            result["vertices"].slice(), result["colors"].slice(), false, this.sx, this.sy, this.sz, this.globalTz);
+	}
+	
+	// init background
+	this.tmp = [];
 
-        this.pieces[piece.title] = new Pieceabstract(this.gl, piece.init,
-            result["vertices"].slice(),
-            result["colors"].slice(),
-            this.sx, this.sy, this.sz, this.globalTz);
-    }
+	this.initBackground();
+    
+	for(var piece in this.pieces){
+		this.tmp.push(this.pieces[piece]);
+	}
 
-    this.drawLevel();
+	this.background.initTexture(this.tmp);
 }
 
-PuzzleLevel.prototype.resetPuzzle = function () {
-    this.resetLevelValues();
-
-    for(var piece in this.pieces){
-        this.pieces[piece].resetValues();
-    }
-};
-
-
-PuzzleLevel.prototype.resetLevelValues = function() {
+PuzzleLevel.prototype.resetPuzzle = function(){
     // The GLOBAL transformation parameters
     this.globalAngleYY = 0.0;
-    this.globalTz = 0.0;
+    this.globalTz = -2.5;
 
     // The scaling factors
     this.sx = 0.5;
     this.sy = 0.5;
     this.sz = 0.5;
+
+	for(var piece in this.pieces){
+		this.pieces[piece].resetValues();
+	}
 };
 
-PuzzleLevel.prototype.drawLevel = function(){
-    // Clearing the frame-buffer and the depth-buffer
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+PuzzleLevel.prototype.draw = function(){
+	// Clearing the frame-buffer and the depth-buffer
+	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    for(var piece in this.pieces){
-        this.pieces[piece].drawScene(this.sx, this.sy, this.sz, this.globalTz);
-    }
+	for(var piece in this.pieces){
+		this.pieces[piece].draw(this.sx, this.sy, this.sz, this.globalTz);
+
+	}
+
+	this.background.draw(this.sx, this.sy, this.sz, this.globalTz);
+};
+
+PuzzleLevel.prototype.initBackground = function(){
+	var result = parseTXTfile("pieces/background.txt");
+
+    var init_pos = {
+        "tx": 0,
+        "ty": 0,
+        "tz": 0,
+        "angleXX": 0,
+        "angleYY": 0,
+        "angleZZ": 0
+    };
+
+	this.background = new Piece(this.gl, init_pos, 0, result["vertices"].slice(), [], true, this.sx, this.sy, this.sz, this.globalTz);
 };
 
 // WebGL Initialization
 PuzzleLevel.prototype.initWebGL =  function(){
-    try{
-        // Create the WebGL context
-        // Some browsers still need "experimental-webgl"
-        this.gl = this.canvas.getContext("webgl") || this.canvas.getContext("experimental-webgl");
+	try{
+		// Create the WebGL context
+		// Some browsers still need "experimental-webgl"
+		this.gl = this.canvas.getContext("webgl") || this.canvas.getContext("experimental-webgl");
 
-        // DEFAULT: Face culling is DISABLED
-        // Enable FACE CULLING
-        this.gl.enable(this.gl.CULL_FACE);
+		// DEFAULT: Face culling is DISABLED
+		// Enable FACE CULLING
+		this.gl.enable(this.gl.CULL_FACE);
 
-        // DEFAULT: The BACK FACE is culled!!
-        // The next instruction is not needed...
-        this.gl.cullFace(this.gl.BACK);
-    } catch (e){
-        print("error init webgl");
-    }
+		// DEFAULT: The BACK FACE is culled!!
+		// The next instruction is not needed...
+		this.gl.cullFace(this.gl.BACK);
+	} catch (e){
+	    console.log(e);
+	}
 
-    if (!this.gl){
-        alert("Could not initialise WebGL, sorry! :-(");
-    }
+	if (!this.gl){
+		alert("Could not initialise WebGL, sorry! :-(");
+	}
 };

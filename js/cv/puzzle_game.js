@@ -1,6 +1,6 @@
-var puzzle;
+var webgl = null;
+var selectedPuzzle = 0;
 
-$(document).ready(function () {
-    var currentLevel = 0;
-    puzzle = new PuzzleLevel(puzzle_definition[currentLevel]);
-});
+function runWebGL() {
+    webgl = new PuzzleLevel(puzzle_definition[selectedPuzzle]);
+}
