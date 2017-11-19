@@ -37,11 +37,11 @@ function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, glob
             0.0, 0.0,
             1.0, 0.0,
             1.0, 1.0,
-            0.0, 1.0,
+            0.0, 1.0
         ];
 
         this.textureVertexIndices = [
-            0, 1, 2, 0, 2, 3,
+            0, 1, 2, 0, 2, 3
         ];
 
         this.cubeVertexIndexBuffer = this.gl.createBuffer();

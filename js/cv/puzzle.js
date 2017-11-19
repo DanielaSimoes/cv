@@ -1,6 +1,6 @@
-function PuzzleLevel(level){
-	this.title = level.title;
-	this.puzzle_pieces = level.puzzle_pieces;
+function Puzzle(info){
+	this.title = info.title;
+	this.puzzle_pieces = info.puzzle_pieces;
 
     // WebGL context
 	this.gl = null;
@@ -39,7 +39,7 @@ function PuzzleLevel(level){
 	this.background.initTexture(this.tmp);
 }
 
-PuzzleLevel.prototype.resetPuzzle = function(){
+Puzzle.prototype.resetPuzzle = function(){
     // The GLOBAL transformation parameters
     this.globalAngleYY = 0.0;
     this.globalTz = -2.5;
@@ -54,7 +54,7 @@ PuzzleLevel.prototype.resetPuzzle = function(){
 	}
 };
 
-PuzzleLevel.prototype.draw = function(){
+Puzzle.prototype.draw = function(){
 	// Clearing the frame-buffer and the depth-buffer
 	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -64,9 +64,10 @@ PuzzleLevel.prototype.draw = function(){
 	}
 
 	this.background.draw(this.sx, this.sy, this.sz, this.globalTz);
+    verify_puzzle();
 };
 
-PuzzleLevel.prototype.initBackground = function(){
+Puzzle.prototype.initBackground = function(){
 	var result = parseTXTfile("pieces/background.txt");
 
     var init_pos = {
@@ -82,7 +83,7 @@ PuzzleLevel.prototype.initBackground = function(){
 };
 
 // WebGL Initialization
-PuzzleLevel.prototype.initWebGL =  function(){
+Puzzle.prototype.initWebGL =  function(){
 	try{
 		// Create the WebGL context
 		// Some browsers still need "experimental-webgl"

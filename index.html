@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/bootstrap-reboot.css">
     <link rel="stylesheet" href="css/bootstrap-grid.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 
@@ -20,35 +20,42 @@
 
     <div class="container-fluid">
 
-        <div class="row">
-            <div class="col-lg-4 text-center" style="padding-top: 90px">
+        <div class="row"  style="margin-top: 20px">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header text-uppercase">
+                        select component
+                    </div>
+                    <div class="card-body" id="components">
+                    </div>
+                    <div class="card-footer text-muted text-uppercase">
+                        <label for="speed">Drag speed</label>
+                        <input type="range" id="speed" min="0.001" value="0.0026" max="0.01" step="0.0001">
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 20px">
+                    <div class="card-header text-uppercase">
+                        board commands
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-light btn-sm text-uppercase" style="background-color: #ebebeb" id="scale-up-button">Zoom In</button>
+                        <button class="btn btn-light btn-sm text-uppercase" style="background-color: #ebebeb" id="scale-down-button">Zoom Out</button>
+                        <button class="btn btn-light btn-sm text-uppercase" style="background-color: #ebebeb" id="reset-button">Reset</button>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 20px">
+                    <div class="card-header text-uppercase">
+                        puzzle goal
+                    </div>
+                    <div class="card-body">
 
-                    <p>
-                        <br>
-                        X : <button class="btn btn-light" style="background-color: #ebebeb" id="XX-rotate-CW-button"><i class="fa fa-rotate-right" aria-hidden="true"></i></button>
-                        <button class="btn btn-light" style="background-color: #ebebeb" id="XX-rotate-CCW-button"><i class="fa fa-rotate-left" aria-hidden="true"></i></button>
-                        <br>
-                        Y : <button class="btn btn-light" style="background-color: #ebebeb" id="YY-rotate-CW-button"><i class="fa fa-rotate-right" aria-hidden="true"></i></button>
-                        <button class="btn btn-light" style="background-color: #ebebeb" id="YY-rotate-CCW-button"><i class="fa fa-rotate-left" aria-hidden="true"></i></button>
-                        <br>
-                        Z : <button class="btn btn-light" style="background-color: #ebebeb" id="ZZ-rotate-CW-button"><i class="fa fa-rotate-right" aria-hidden="true"></i></button>
-                        <button class="btn btn-light" style="background-color: #ebebeb" id="ZZ-rotate-CCW-button"><i class="fa fa-rotate-left" aria-hidden="true"></i></button>
-                        <br>
-                    </p>
-
-                    <p>
-                        <button class="btn btn-light" style="background-color: #ebebeb" id="scale-up-button">Scale Up</button>
-                        <button class="btn btn-light" style="background-color: #ebebeb" id="scale-down-button">Scale Down</button>
-                    </p>
-
-                    <p>
-                        <button class="btn btn-light" style="background-color: #ebebeb" id="reset-button">Reset</button>
-                    </p>
-
+                    </div>
+                    <div id="puzzle_success" class="card-footer text-muted text-uppercase"><span class="badge badge-success">Success</span></div>
+                </div>
             </div>
             <div class="col-lg-8">
                 <div style="text-align: center">
-                    <canvas id="webgl-id" style="border:1px solid #000000;" width="550" height="550"></canvas>
+                    <canvas id="webgl-id" style="border:1px solid #000000;" width="700" height="600"></canvas>
                 </div>
             </div>
         </div>
@@ -138,8 +145,8 @@
     <script type="text/javascript" src="js/cv/initShaders.js"></script>
     <script type="text/javascript" src="js/cv/puzzle_definition.js"></script>
     <script type="text/javascript" src="js/cv/piece.js"></script>
-    <script type="text/javascript" src="js/cv/puzzle_level.js"></script>
-    <script type="text/javascript" src="js/cv/puzzle_game.js"></script>
+    <script type="text/javascript" src="js/cv/puzzle.js"></script>
+    <script type="text/javascript" src="js/cv/runWebGL.js"></script>
     <!-- end -->
 
     <script type="text/javascript" src="js/popper.js"></script>
