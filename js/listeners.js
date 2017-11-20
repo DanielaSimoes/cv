@@ -70,7 +70,7 @@ function setEventListeners(){
             $("#components").append('<button type="button" rel="id'+id+'" class="btn btn-fresh text-uppercase btn-sm">'+name+'</button>');
         }
     }
-    $("#components").append('<button type="button" class="btn btn-sky text-uppercase btn-sm">Board</button>');
+    $("#components").append('<button type="button" rel="idboard" class="btn btn-sky text-uppercase btn-sm">Board</button>');
 
     $('button[rel^="id"]').click(function () {
         selected_obj_id = $(this).attr('rel').replace("id", "");
@@ -80,31 +80,54 @@ function setEventListeners(){
 
     /* end set btn for puzzle */
 
-    document.addEventListener("keydown", function(event){
+    var map = {37: false, // left key
+        38: false, // up key
+        39: false, // right key
+        40: false, // down key
+        90: false // z key
+    };
 
-        // Getting the pressed key
+    $(document).keydown(function(event){
 
-        // Updating rec. depth and drawing again
-
+        if(selected_obj_id==="board"){
+            return;
+        }
+        
         var key = event.keyCode; // ASCII
+        map[key] = true;
 
-        switch(key){
-            case 38 : // up
+        if (event.keyCode in map ) {
+            if (map[90] && map[38]) {
+                console.log("Z1");
+                webgl.pieces[selected_obj_id].tz += translation;
+                webgl.draw();
+                return false;
+            } else if (map[90] && map[40]) {
+                console.log("Z2");
+                webgl.pieces[selected_obj_id].tz -= translation;
+                webgl.draw();
+                return false;
+            }else if (map[38]){
                 webgl.pieces[selected_obj_id].ty += translation;
                 webgl.draw();
-                break;
-            case 40 : // down
+                return false;
+            }else if(map[40]){
                 webgl.pieces[selected_obj_id].ty -= translation;
                 webgl.draw();
-                break;
-            case 37: // left
+                return false;
+            }else if(map[37]){
                 webgl.pieces[selected_obj_id].tx -= translation;
                 webgl.draw();
-                break;
-            case 39: // right
+                return false;
+            }else if(map[39]){
                 webgl.pieces[selected_obj_id].tx += translation;
                 webgl.draw();
-                break;
+                return false;
+            }
+        }
+    }).keyup(function(e) {
+        if (e.keyCode in map) {
+            map[e.keyCode] = false;
         }
     });
 
@@ -148,11 +171,25 @@ function setEventListeners(){
 
         var speed = $("#speed").val();
 
-        var ty = (coords.y - old_y)*speed;
-        var tx = (coords.x - old_x)*speed;
+        var delta_y = coords.y - old_y;
+        var delta_x = coords.x - old_x;
 
-        webgl.pieces[selected_obj_id].ty += ty;
-        webgl.pieces[selected_obj_id].tx += tx;
+        if(selected_obj_id!=="board"){
+            var ty = delta_y*speed;
+            var tx = delta_x*speed;
+
+            webgl.pieces[selected_obj_id].ty += ty;
+            webgl.pieces[selected_obj_id].tx += tx;
+        }else{
+            for(var piece in webgl.pieces) {
+                webgl.pieces[piece].globalAngleXX += radians(10 * delta_x);
+                webgl.pieces[piece].globalAngleYY += radians(10 * delta_y);
+            }
+
+            webgl.background.globalAngleXX += radians( 10 * delta_x);
+            webgl.background.globalAngleYY += radians( 10 * delta_y);
+        }
+
         old_y = coords.y;
         old_x = coords.x;
         webgl.draw();
@@ -162,8 +199,5 @@ function setEventListeners(){
         old_y = undefined;
         old_x = undefined;
     });
-
-    // SELECT COMPONENT WITH MOUSE
-
 
 }
