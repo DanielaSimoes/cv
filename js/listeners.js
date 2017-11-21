@@ -98,12 +98,10 @@ function setEventListeners(){
 
         if (event.keyCode in map ) {
             if (map[90] && map[38]) {
-                console.log("Z1");
                 webgl.pieces[selected_obj_id].tz += translation;
                 webgl.draw();
                 return false;
             } else if (map[90] && map[40]) {
-                console.log("Z2");
                 webgl.pieces[selected_obj_id].tz -= translation;
                 webgl.draw();
                 return false;
@@ -149,8 +147,6 @@ function setEventListeners(){
         y = c_height - (ev.clientY - top); //c_height is a global variable that we maintain in codeview.js
         //this variable contains the height of the canvas and it updates dynamically
         //as we resize the browser window.
-        //console.info('x='+x+', y='+y);
-
         return {x:x,y:y};
     }
 
@@ -227,6 +223,20 @@ function setEventListeners(){
 
     document.getElementById("ZZ-rotate-CCW-button").onclick = function(){
         webgl.pieces[selected_obj_id].angleZZ += 15.0;
+        webgl.draw();
+    };
+
+    document.getElementById("scale-up-button").onclick = function(){
+        webgl.sx *= 1.1;
+        webgl.sy *= 1.1;
+        webgl.sz *= 1.1;
+        webgl.draw();
+    };
+
+    document.getElementById("scale-down-button").onclick = function(){
+        webgl.sx *= 0.9;
+        webgl.sy *= 0.9;
+        webgl.sz *= 0.9;
         webgl.draw();
     };
 

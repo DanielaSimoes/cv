@@ -17,6 +17,11 @@ function Puzzle(info){
     // reset puzzle values
 	this.resetPuzzle();
 
+    // The scaling factors
+    this.sx = 0.5;
+    this.sy = 0.5;
+    this.sz = 0.5;
+
     // init webgl
 	this.initWebGL();
 
@@ -36,7 +41,7 @@ function Puzzle(info){
 		this.tmp.push(this.pieces[piece]);
 	}
 
-	this.background.initTexture(this.tmp);
+	this.background.initTexture(this.tmp, this.sx, this.sy, this.sz, this.globalTz);
 }
 
 Puzzle.prototype.resetPuzzle = function(){

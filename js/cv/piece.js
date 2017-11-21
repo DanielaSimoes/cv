@@ -3,11 +3,6 @@ var texture, gl, tmp;
 function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, globalTz) {
     // web gl object
     this.gl = gl;
-    this.pos = pos;
-
-    this.sx = sx;
-    this.sy = sy;
-    this.sz = sz;
 
     this.vertices = vertices;
     this.init_pos = init_pos;
@@ -45,8 +40,6 @@ function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, glob
         ];
 
         this.cubeVertexIndexBuffer = this.gl.createBuffer();
-
-        this.initTexture();
     }else{
         this.triangleVertexPositionBuffer = this.gl.createBuffer();
         this.triangleVertexColorBuffer = this.gl.createBuffer();
@@ -190,7 +183,7 @@ Piece.prototype.draw = function (sx, sy, sz, globalTz) {
         mvMatrix);
 };
 
-Piece.prototype.initTexture = function (tmpArray) {
+Piece.prototype.initTexture = function (tmpArray, sx, sy, sz, globalTz) {
     var self = this;
 
     function handleTextureLoaded(texture) {
@@ -207,10 +200,10 @@ Piece.prototype.initTexture = function (tmpArray) {
 
     texture.image.onload = function () {
         handleTextureLoaded(texture);
-        self.draw(self.sx, self.sy, self.sz, self.globalTz);
+        self.draw(sx, sy, sz, globalTz);
 
         for (var model in tmpArray) {
-            tmpArray[model].draw(self.sx, self.sy, self.sz, self.globalTz);
+            tmpArray[model].draw(sx, sy, sz, globalTz);
         }
     };
 
