@@ -200,4 +200,35 @@ function setEventListeners(){
         old_x = undefined;
     });
 
+    document.getElementById("XX-rotate-CW-button").onclick = function(){
+        webgl.pieces[selected_obj_id].angleXX += 15.0;
+        webgl.draw();
+    };
+
+    document.getElementById("XX-rotate-CCW-button").onclick = function(){
+        webgl.pieces[selected_obj_id].angleXX -= 15.0;
+        webgl.draw();
+    };
+
+    document.getElementById("YY-rotate-CW-button").onclick = function(){
+        webgl.pieces[selected_obj_id].angleYY -= 15.0;
+        webgl.draw();
+    };
+
+    document.getElementById("YY-rotate-CCW-button").onclick = function(){
+        webgl.pieces[selected_obj_id].angleYY += 15.0;
+        webgl.draw();
+    };
+
+    document.getElementById("ZZ-rotate-CW-button").onclick = function(){
+        webgl.pieces[selected_obj_id].angleZZ -= 15.0;
+        webgl.draw();
+    };
+
+    document.getElementById("ZZ-rotate-CCW-button").onclick = function(){
+        webgl.pieces[selected_obj_id].angleZZ += 15.0;
+        webgl.draw();
+    };
+
+
 }
