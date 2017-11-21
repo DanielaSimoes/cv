@@ -5,7 +5,7 @@ var puzzle_definition =
         "puzzle_pieces": [
             {
                 "id": "cubo",
-                "piece_url": "pieces/cubo.txt",
+                "piece_url": "pieces/cuboRed.txt",
                 "name": "Prisma Triangular Blue",
                 "init": {
                     "tx": 0.2,
