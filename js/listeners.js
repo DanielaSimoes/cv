@@ -1,20 +1,33 @@
-var selected_obj_id = "triangulo";
+var selected_obj_id = puzzle_definition["puzzle_pieces"][0]["id"];
 var translation = 0.01;
 var old_x = undefined, old_y = undefined;
 
-function update_x(val) {
-    $('#progress_bar_tx').css('width', val+'%').attr('aria-valuenow', val);
-    $("#value_tx").html("tx: "+val+"%");
-}
+function update_bar(id_suffix, definition, current) {
+    var val = Math.ceil(100-((definition-current)*100)%100);
 
-function update_y(val) {
-    $('#progress_bar_ty').css('width', val+'%').attr('aria-valuenow', val);
-    $("#value_ty").html("ty: "+val+"%");
-}
+    if (val>100){
+        val = val-100;
+        val = 100-val
+    }
 
-function update_z(val) {
-    $('#progress_bar_tz').css('width', val+'%').attr('aria-valuenow', val);
-    $("#value_tz").html("tz: "+val+"%");
+    $('#progress_bar_'+id_suffix).css('width', val+'%').attr('aria-valuenow', val);
+    $("#value_"+id_suffix).html(id_suffix+": "+val+"%");
+
+    // remove all progress class
+    $('#progress_bar_'+id_suffix).removeClass("bg-danger");
+    $('#progress_bar_'+id_suffix).removeClass("bg-warning");
+    $('#progress_bar_'+id_suffix).removeClass("bg-info");
+    $('#progress_bar_'+id_suffix).removeClass("bg-success");
+
+    if(val>90){
+        $('#progress_bar_'+id_suffix).addClass("bg-success");
+    }else if(val>60){
+        $('#progress_bar_'+id_suffix).addClass("bg-info");
+    }else if(val>35){
+        $('#progress_bar_'+id_suffix).addClass("bg-warning");
+    }else{
+        $('#progress_bar_'+id_suffix).addClass("bg-danger");
+    }
 }
 
 function verify_puzzle() {
@@ -27,10 +40,10 @@ function verify_puzzle() {
             var definition = (parseFloat(puzzle_definition.puzzle_pieces[i].end.tx.toFixed(2))-parseFloat(puzzle_definition.puzzle_pieces[z].end.tx.toFixed(2))).toFixed(2);
             var current = (parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].tx.toFixed(2))-parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[z].id].tx.toFixed(2))).toFixed(2);
 
+            update_bar("tx", definition, current);
+
             if (definition!==current){
                 success = false;
-                console.log("tx:", definition, current);
-                console.log("%", 100-((definition-current)*100)%100);
             }
 
             // difference between puzzle definition and current puzzle pieces array
@@ -38,9 +51,10 @@ function verify_puzzle() {
             definition = (parseFloat(puzzle_definition.puzzle_pieces[i].end.ty.toFixed(2))-parseFloat(puzzle_definition.puzzle_pieces[z].end.ty.toFixed(2))).toFixed(2);
             current = (parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].ty.toFixed(2))-parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[z].id].ty.toFixed(2))).toFixed(2);
 
+            update_bar("ty", definition, current);
+
             if (definition!==current){
                 success = false;
-                console.log("ty", definition, current);
             }
 
             // difference between puzzle definition and current puzzle pieces array
@@ -48,11 +62,11 @@ function verify_puzzle() {
             definition = (parseFloat(puzzle_definition.puzzle_pieces[i].end.tz.toFixed(2))-parseFloat(puzzle_definition.puzzle_pieces[z].end.tz.toFixed(2))).toFixed(2);
             current = (parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].tz.toFixed(2))-parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[z].id].tz.toFixed(2))).toFixed(2);
 
+            update_bar("tz", definition, current);
+
             if (definition!==current){
                 success = false;
-                console.log("tz", definition, current);
             }
-            console.log("tz", definition, current);
         }
     }
 
@@ -81,6 +95,8 @@ function setEventListeners(){
     /* set btn for puzzle */
     $("#puzzle_success").hide();
 
+    var first = true;
+
     for(var i=0; i<puzzle_definition.puzzle_pieces.length; i++){
         var name = puzzle_definition.puzzle_pieces[i].name;
         var id = puzzle_definition.puzzle_pieces[i].id;
@@ -89,6 +105,11 @@ function setEventListeners(){
             $("#components").append('<li class="nav-item"><a rel="id'+id+'" class="btn btn-sunny text-uppercase btn-sm">'+(i+1)+': '+name+'</a></li>');
         }else{
             $("#components").append('<li class="nav-item"><a rel="id'+id+'" class="btn btn-fresh text-uppercase btn-sm">'+(i+1)+': '+name+'</a></li>');
+        }
+
+        if(first){
+            $("a[rel='id"+id+"']").addClass("active");
+            first = false;
         }
     }
     $("#components").append('<a rel="idboard" class="btn btn-sky text-uppercase btn-sm">Board</a>');
@@ -261,5 +282,9 @@ function setEventListeners(){
         webgl.draw();
     };
 
+    document.getElementById("reset-button").onclick = function () {
+        webgl.resetPuzzle();
+        webgl.draw();
+    };
 
 }
