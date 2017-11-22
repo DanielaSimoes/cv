@@ -284,6 +284,8 @@ function setEventListeners(){
 
     document.getElementById("reset-button").onclick = function () {
         webgl.resetPuzzle();
+        webgl.background.globalAngleXX = 0.0;
+        webgl.background.globalAngleYY = 0.0;
         webgl.draw();
     };
 

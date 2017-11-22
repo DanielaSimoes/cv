@@ -55,6 +55,8 @@ Piece.prototype.resetValues = function () {
     this.angleXX = this.init_pos.angleXX;
     this.angleYY = this.init_pos.angleYY;
     this.angleZZ = this.init_pos.angleZZ;
+    this.globalAngleXX = 0.0;
+    this.globalAngleYY = 0.0;
 };
 
 // Handling the Vertex and the Color Buffers

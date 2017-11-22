@@ -65,7 +65,6 @@ Puzzle.prototype.draw = function(){
 
 	for(var piece in this.pieces){
 		this.pieces[piece].draw(this.sx, this.sy, this.sz, this.globalTz);
-
 	}
 
 	this.background.draw(this.sx, this.sy, this.sz, this.globalTz);
