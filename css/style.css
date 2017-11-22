@@ -108,5 +108,14 @@ h2{
     outline-offset: 0px;
 }
 
-a {color:#fff;}
-a:hover {text-decoration:none; color:#fff;}
+.progress-value {
+    position:absolute;
+    right:0;
+    left:0;
+    margin-top: -1px;
+}
+.progress {
+    text-align:center;
+    width:100%;
+    color: black;
+}

@@ -2,6 +2,21 @@ var selected_obj_id = "triangulo";
 var translation = 0.01;
 var old_x = undefined, old_y = undefined;
 
+function update_x(val) {
+    $('#progress_bar_tx').css('width', val+'%').attr('aria-valuenow', val);
+    $("#value_tx").html("tx: "+val+"%");
+}
+
+function update_y(val) {
+    $('#progress_bar_ty').css('width', val+'%').attr('aria-valuenow', val);
+    $("#value_ty").html("ty: "+val+"%");
+}
+
+function update_z(val) {
+    $('#progress_bar_tz').css('width', val+'%').attr('aria-valuenow', val);
+    $("#value_tz").html("tz: "+val+"%");
+}
+
 function verify_puzzle() {
     var success = true;
 
@@ -15,6 +30,7 @@ function verify_puzzle() {
             if (definition!==current){
                 success = false;
                 console.log("tx:", definition, current);
+                console.log("%", 100-((definition-current)*100)%100);
             }
 
             // difference between puzzle definition and current puzzle pieces array
@@ -36,6 +52,7 @@ function verify_puzzle() {
                 success = false;
                 console.log("tz", definition, current);
             }
+            console.log("tz", definition, current);
         }
     }
 
@@ -55,6 +72,10 @@ function verify_puzzle() {
     */
 }
 
+$(document).ready(function () {
+    verify_puzzle();
+});
+
 function setEventListeners(){
 
     /* set btn for puzzle */
@@ -65,16 +86,16 @@ function setEventListeners(){
         var id = puzzle_definition.puzzle_pieces[i].id;
 
         if(i%2){
-            $("#components").append('<button type="button" rel="id'+id+'" class="btn btn-sunny text-uppercase btn-sm">'+name+'</button>');
+            $("#components").append('<li class="nav-item"><a rel="id'+id+'" class="btn btn-sunny text-uppercase btn-sm">'+(i+1)+': '+name+'</a></li>');
         }else{
-            $("#components").append('<button type="button" rel="id'+id+'" class="btn btn-fresh text-uppercase btn-sm">'+name+'</button>');
+            $("#components").append('<li class="nav-item"><a rel="id'+id+'" class="btn btn-fresh text-uppercase btn-sm">'+(i+1)+': '+name+'</a></li>');
         }
     }
-    $("#components").append('<button type="button" rel="idboard" class="btn btn-sky text-uppercase btn-sm">Board</button>');
+    $("#components").append('<a rel="idboard" class="btn btn-sky text-uppercase btn-sm">Board</a>');
 
-    $('button[rel^="id"]').click(function () {
+    $('a[rel^="id"]').click(function () {
         selected_obj_id = $(this).attr('rel').replace("id", "");
-        $('button[rel^="id"]').removeClass("active");
+        $('a[rel^="id"]').removeClass("active");
         $(this).addClass("active");
     });
 
