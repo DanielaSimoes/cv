@@ -1,4 +1,4 @@
-var selected_obj_id = puzzle_definition["puzzle_pieces"][0]["id"];
+var selected_obj_id = null;
 var translation = 0.01;
 var old_x = undefined, old_y = undefined;
 
