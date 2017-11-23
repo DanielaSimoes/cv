@@ -71,13 +71,20 @@ function verify_puzzle() {
     }
 
     if(success){
+        //webgl.done = true;
+        selected_obj_id = "board";
+        $('a[rel^="id"]').addClass("disabled");
         $("#puzzle_success").show();
+        $("#next-puzzle").show();
     }else{
+        //webgl.done = false;
         $("#puzzle_success").hide();
     }
 }
 
 function setEventListeners(){
+
+    $("#next-puzzle").hide();
 
     /* completed list */
 

@@ -5,6 +5,9 @@ function Puzzle(info){
     // WebGL context
 	this.gl = null;
 
+	// puzzle done
+	this.done = true;
+
     // pieces array
 	this.pieces = {};
 
@@ -60,15 +63,16 @@ Puzzle.prototype.resetPuzzle = function(){
 };
 
 Puzzle.prototype.draw = function(){
+    verify_puzzle();
 	// Clearing the frame-buffer and the depth-buffer
 	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
 	for(var piece in this.pieces){
+		this.pieces[piece].done = this.done;
 		this.pieces[piece].draw(this.sx, this.sy, this.sz, this.globalTz);
 	}
 
 	this.background.draw(this.sx, this.sy, this.sz, this.globalTz);
-    verify_puzzle();
 };
 
 Puzzle.prototype.initBackground = function(){
