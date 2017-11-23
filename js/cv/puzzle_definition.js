@@ -20,6 +20,23 @@ var puzzle_definition =
                     "ty": 0.47,
                     "tz": 0.5
                 }
+            },{
+                "id": "cubo2",
+                "piece_url": "pieces/cuboRed.txt",
+                "name": "Cubo 2",
+                "init": {
+                    "tx": 0.8,
+                    "ty": 0.6,
+                    "tz": 0.5,
+                    "angleXX": 225,
+                    "angleYY": 45,
+                    "angleZZ": 45
+                },
+                "end": {
+                    "tx": -0.17,
+                    "ty": 0.44,
+                    "tz": 0.2
+                }
             },
             {
                 "id": "triangulo",

@@ -2,7 +2,7 @@ var selected_obj_id = puzzle_definition["puzzle_pieces"][0]["id"];
 var translation = 0.01;
 var old_x = undefined, old_y = undefined;
 
-function update_bar(id_suffix, definition, current) {
+function update_bar(id_suffix, i, z, definition, current) {
     var val = Math.ceil(100-((definition-current)*100)%100);
 
     if (val>100){
@@ -10,23 +10,23 @@ function update_bar(id_suffix, definition, current) {
         val = 100-val
     }
 
-    $('#progress_bar_'+id_suffix).css('width', val+'%').attr('aria-valuenow', val);
-    $("#value_"+id_suffix).html(id_suffix+": "+val+"%");
+    $('#progress_bar_'+id_suffix+''+i+''+z).css('width', val+'%').attr('aria-valuenow', val);
+    $("#value_"+id_suffix+''+i+''+z).html(id_suffix+": "+val+"%");
 
     // remove all progress class
-    $('#progress_bar_'+id_suffix).removeClass("bg-danger");
-    $('#progress_bar_'+id_suffix).removeClass("bg-warning");
-    $('#progress_bar_'+id_suffix).removeClass("bg-info");
-    $('#progress_bar_'+id_suffix).removeClass("bg-success");
+    $('#progress_bar_'+id_suffix+''+i+''+z).removeClass("bg-danger");
+    $('#progress_bar_'+id_suffix+''+i+''+z).removeClass("bg-warning");
+    $('#progress_bar_'+id_suffix+''+i+''+z).removeClass("bg-info");
+    $('#progress_bar_'+id_suffix+''+i+''+z).removeClass("bg-success");
 
     if(val>90){
-        $('#progress_bar_'+id_suffix).addClass("bg-success");
+        $('#progress_bar_'+id_suffix+''+i+''+z).addClass("bg-success");
     }else if(val>60){
-        $('#progress_bar_'+id_suffix).addClass("bg-info");
+        $('#progress_bar_'+id_suffix+''+i+''+z).addClass("bg-info");
     }else if(val>35){
-        $('#progress_bar_'+id_suffix).addClass("bg-warning");
+        $('#progress_bar_'+id_suffix+''+i+''+z).addClass("bg-warning");
     }else{
-        $('#progress_bar_'+id_suffix).addClass("bg-danger");
+        $('#progress_bar_'+id_suffix+''+i+''+z).addClass("bg-danger");
     }
 }
 
@@ -40,7 +40,7 @@ function verify_puzzle() {
             var definition = (parseFloat(puzzle_definition.puzzle_pieces[i].end.tx.toFixed(2))-parseFloat(puzzle_definition.puzzle_pieces[z].end.tx.toFixed(2))).toFixed(2);
             var current = (parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].tx.toFixed(2))-parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[z].id].tx.toFixed(2))).toFixed(2);
 
-            update_bar("tx", definition, current);
+            update_bar("tx", i, z, definition, current);
 
             if (definition!==current){
                 success = false;
@@ -51,7 +51,7 @@ function verify_puzzle() {
             definition = (parseFloat(puzzle_definition.puzzle_pieces[i].end.ty.toFixed(2))-parseFloat(puzzle_definition.puzzle_pieces[z].end.ty.toFixed(2))).toFixed(2);
             current = (parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].ty.toFixed(2))-parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[z].id].ty.toFixed(2))).toFixed(2);
 
-            update_bar("ty", definition, current);
+            update_bar("ty", i, z, definition, current);
 
             if (definition!==current){
                 success = false;
@@ -62,7 +62,7 @@ function verify_puzzle() {
             definition = (parseFloat(puzzle_definition.puzzle_pieces[i].end.tz.toFixed(2))-parseFloat(puzzle_definition.puzzle_pieces[z].end.tz.toFixed(2))).toFixed(2);
             current = (parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].tz.toFixed(2))-parseFloat(webgl.pieces[puzzle_definition.puzzle_pieces[z].id].tz.toFixed(2))).toFixed(2);
 
-            update_bar("tz", definition, current);
+            update_bar("tz", i, z, definition, current);
 
             if (definition!==current){
                 success = false;
@@ -75,22 +75,47 @@ function verify_puzzle() {
     }else{
         $("#puzzle_success").hide();
     }
-
-    /*
-    for(var i=0; i<puzzle_definition.puzzle_pieces.length; i++){
-        console.log(puzzle_definition.puzzle_pieces[i].id);
-        console.log(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].tx.toFixed(2));
-        console.log(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].ty.toFixed(2));
-        console.log(webgl.pieces[puzzle_definition.puzzle_pieces[i].id].tz.toFixed(2));
-    }
-    */
 }
 
-$(document).ready(function () {
-    verify_puzzle();
-});
-
 function setEventListeners(){
+
+    /* completed list */
+
+    var first_class = 'active';
+
+    for(var i=0; i<puzzle_definition.puzzle_pieces.length; i++) {
+        for (var z = i + 1; z < puzzle_definition.puzzle_pieces.length; z++) {
+            /* tab */
+            $("#completed_list").append('<li class="nav-item"><a class="nav-link '+first_class+'" id="home-tab'+i+''+z+'" data-toggle="tab" href="#home'+i+''+z+'" role="tab" aria-controls="home'+i+''+z+'" aria-selected="true">Piece '+(i+1)+' and '+(z+1)+'</a></li>');
+            /* body */
+
+
+            $("#completed_content").append('<div class="tab-pane fade show '+first_class+'" id="home'+i+''+z+'" role="tabpanel" aria-labelledby="home-tab">\n' +
+                '                                        <div class="row" style="margin-top: 10px">\n' +
+                '                                            <div class="col-lg-12">\n' +
+                '                                                <div class="progress">\n' +
+                '                                                    <span class="progress-value" id="value_tx'+i+''+z+'">tx: 10%</span>\n' +
+                '                                                    <div id="progress_bar_tx'+i+''+z+'" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width:10%"></div>\n' +
+                '                                                </div>\n' +
+                '                                            </div>\n' +
+                '                                            <div class="col-lg-12" style="margin-top: 10px">\n' +
+                '                                                <div class="progress">\n' +
+                '                                                    <span class="progress-value" id="value_ty'+i+''+z+'">ty: 10%</span>\n' +
+                '                                                    <div id="progress_bar_ty'+i+''+z+'" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width:10%"></div>\n' +
+                '                                                </div>\n' +
+                '                                            </div>\n' +
+                '                                            <div class="col-lg-12" style="margin-top: 10px">\n' +
+                '                                                <div class="progress">\n' +
+                '                                                    <span class="progress-value" id="value_tz'+i+''+z+'">tz: 10%</span>\n' +
+                '                                                    <div id="progress_bar_tz'+i+''+z+'" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" style="width:10%"></div>\n' +
+                '                                                </div>\n' +
+                '                                            </div>\n' +
+                '                                        </div>\n' +
+                '                                    </div>');
+
+            first_class = '';
+        }
+    }
 
     /* set btn for puzzle */
     $("#puzzle_success").hide();
@@ -134,7 +159,7 @@ function setEventListeners(){
         if(selected_obj_id==="board"){
             return;
         }
-        
+
         var key = event.keyCode; // ASCII
         map[key] = true;
 
