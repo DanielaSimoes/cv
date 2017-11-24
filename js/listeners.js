@@ -70,7 +70,7 @@ function verify_puzzle() {
         }
     }
 
-    if(success){
+    if(success && next_puzzle){
         //webgl.done = true;
         selected_obj_id = "board";
         $('a[rel^="id"]').addClass("disabled");
