@@ -8,16 +8,12 @@ function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, glob
     this.vertices = vertices;
     this.init_pos = init_pos;
     this.colors = colors;
-    this.normals = [
-        0.0,  0.0,  1.0,
-        0.0,  0.0,  1.0,
-        0.0,  0.0,  1.0,
-        0.0,  0.0,  1.0,
-        0.0,  0.0,  1.0,
-        0.0,  0.0,  1.0,
-        0.0,  0.0,  1.0,
-        0.0,  0.0,  1.0
+    this.normals = [0.0,  0.0,  1.0,
+                    0.0,  0.0,  1.0,
+                    0.0,  0.0,  1.0
     ];
+
+    computeVertexNormals( this.vertices, this.normals );
 
     this.globalTz = globalTz;
     this.globalAngleYY = 0.0;
@@ -73,7 +69,7 @@ Piece.prototype.resetValues = function () {
 Piece.prototype.computeIllumination = function( mvMatrix ) {
     // Phong Illumination Model
     // Ambient coef.
-    var kAmbi = [ 0.2, 0.2, 0.2 ];
+    var kAmbi = [ 0.4, 0.4, 0.4 ];
 
     // Difuse coef.
     var kDiff = [ 0.7, 0.7, 0.7 ];
