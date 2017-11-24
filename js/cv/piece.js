@@ -4,7 +4,7 @@ function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, glob
     // web gl object
     this.gl = gl;
 
-    this.done = true;
+    this.done = false;
     this.vertices = vertices;
     this.init_pos = init_pos;
     this.colors = colors;

@@ -6,7 +6,7 @@ function Puzzle(info){
 	this.gl = null;
 
 	// puzzle done
-	this.done = true;
+	this.done = false;
 
     // pieces array
 	this.pieces = {};
@@ -63,7 +63,6 @@ Puzzle.prototype.resetPuzzle = function(){
 };
 
 Puzzle.prototype.draw = function(){
-    verify_puzzle();
 	// Clearing the frame-buffer and the depth-buffer
 	this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -100,10 +99,6 @@ Puzzle.prototype.initWebGL =  function(){
 		// DEFAULT: Face culling is DISABLED
 		// Enable FACE CULLING
 		this.gl.enable(this.gl.CULL_FACE);
-
-		// DEFAULT: The BACK FACE is culled!!
-		// The next instruction is not needed...
-		this.gl.cullFace(this.gl.BACK);
 	} catch (e){
 	    console.log(e);
 	}

@@ -71,7 +71,7 @@ function verify_puzzle() {
     }
 
     if(success){
-        //webgl.done = true;
+        webgl.done = true;
         selected_obj_id = "board";
         $('a[rel^="id"]').addClass("disabled");
         $("#puzzle_success").show();
@@ -81,9 +81,9 @@ function verify_puzzle() {
 
         var audio = new Audio('winning.m4a');
         audio.play();
-
+        webgl.draw();
     }else{
-        //webgl.done = false;
+        webgl.done = false;
         $("#puzzle_success").hide();
     }
 }
@@ -184,26 +184,32 @@ function setEventListeners(){
         if (event.keyCode in map ) {
             if (map[90] && map[38]) {
                 webgl.pieces[selected_obj_id].tz += translation;
+                verify_puzzle();
                 webgl.draw();
                 return false;
             } else if (map[90] && map[40]) {
                 webgl.pieces[selected_obj_id].tz -= translation;
+                verify_puzzle();
                 webgl.draw();
                 return false;
             }else if (map[38]){
                 webgl.pieces[selected_obj_id].ty += translation;
+                verify_puzzle();
                 webgl.draw();
                 return false;
             }else if(map[40]){
                 webgl.pieces[selected_obj_id].ty -= translation;
+                verify_puzzle();
                 webgl.draw();
                 return false;
             }else if(map[37]){
                 webgl.pieces[selected_obj_id].tx -= translation;
+                verify_puzzle();
                 webgl.draw();
                 return false;
             }else if(map[39]){
                 webgl.pieces[selected_obj_id].tx += translation;
+                verify_puzzle();
                 webgl.draw();
                 return false;
             }
@@ -261,6 +267,7 @@ function setEventListeners(){
 
             webgl.pieces[selected_obj_id].ty += ty;
             webgl.pieces[selected_obj_id].tx += tx;
+            verify_puzzle();
         }else{
             for(var piece in webgl.pieces) {
                 webgl.pieces[piece].globalAngleXX += radians(10 * delta_x);
@@ -274,7 +281,6 @@ function setEventListeners(){
         old_y = coords.y;
         old_x = coords.x;
         webgl.draw();
-
     })
     .mouseup(function() {
         old_y = undefined;
@@ -284,31 +290,37 @@ function setEventListeners(){
     document.getElementById("XX-rotate-CW-button").onclick = function(){
         webgl.pieces[selected_obj_id].angleXX += 15.0;
         webgl.draw();
+        verify_puzzle();
     };
 
     document.getElementById("XX-rotate-CCW-button").onclick = function(){
         webgl.pieces[selected_obj_id].angleXX -= 15.0;
         webgl.draw();
+        verify_puzzle();
     };
 
     document.getElementById("YY-rotate-CW-button").onclick = function(){
         webgl.pieces[selected_obj_id].angleYY -= 15.0;
         webgl.draw();
+        verify_puzzle();
     };
 
     document.getElementById("YY-rotate-CCW-button").onclick = function(){
         webgl.pieces[selected_obj_id].angleYY += 15.0;
         webgl.draw();
+        verify_puzzle();
     };
 
     document.getElementById("ZZ-rotate-CW-button").onclick = function(){
         webgl.pieces[selected_obj_id].angleZZ -= 15.0;
         webgl.draw();
+        verify_puzzle();
     };
 
     document.getElementById("ZZ-rotate-CCW-button").onclick = function(){
         webgl.pieces[selected_obj_id].angleZZ += 15.0;
         webgl.draw();
+        verify_puzzle();
     };
 
     document.getElementById("scale-up-button").onclick = function(){
@@ -330,6 +342,7 @@ function setEventListeners(){
         webgl.background.globalAngleXX = 0.0;
         webgl.background.globalAngleYY = 0.0;
         webgl.draw();
+        verify_puzzle();
     };
 
 }
