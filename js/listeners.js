@@ -70,12 +70,18 @@ function verify_puzzle() {
         }
     }
 
-    if(success && next_puzzle){
+    if(success){
         //webgl.done = true;
         selected_obj_id = "board";
         $('a[rel^="id"]').addClass("disabled");
         $("#puzzle_success").show();
-        $("#next-puzzle").show();
+        if (next_puzzle){
+            $("#next-puzzle").show();
+        }
+
+        var audio = new Audio('winning.m4a');
+        audio.play();
+
     }else{
         //webgl.done = false;
         $("#puzzle_success").hide();
