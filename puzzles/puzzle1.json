@@ -3,39 +3,45 @@
   "backgroud_url": "img/background.png",
   "puzzle_pieces": [
     {
-      "id": "cubo",
+      "id": "cubored",
       "piece_url": "pieces/cuboRed.txt",
-      "name": "Prisma Triangular Blue",
+      "name": "Cubo Vermelho",
       "init": {
         "tx": 0.2,
         "ty": 0.4,
-        "tz": 0.5,
+        "tz": 0,
         "angleXX": 225,
         "angleYY": 45,
         "angleZZ": 45
       },
       "end": {
-        "tx": -0.19,
-        "ty": 0.47,
-        "tz": 0.5
+        "tx": 0.0,
+        "ty": 0.0,
+        "tz": 0,
+        "angleXX": 0,
+        "angleYY": 0,
+        "angleZZ": 0
       }
     },
     {
-      "id": "triangulo",
-      "piece_url": "pieces/prisma.txt",
-      "name": "Prisma Triangular Blue1",
+      "id": "cubogrey",
+      "piece_url": "pieces/cuboGrey.txt",
+      "name": "Cubo Cinzento",
       "init": {
-        "tx": 0.3,
-        "ty": 0.4,
-        "tz": 0.5,
+        "tx": -0.2,
+        "ty": 0.2,
+        "tz": 0,
         "angleXX": 225,
         "angleYY": 45,
         "angleZZ": 45
       },
       "end": {
-        "tx": -0.49,
-        "ty": 0.28,
-        "tz": 0.5
+        "tx": -0.1,
+        "ty": 0.0,
+        "tz": 0,
+        "angleXX": 0,
+        "angleYY": 0,
+        "angleZZ": 0
       }
     }
   ]
