@@ -5,7 +5,7 @@
     {
       "id": "cubo",
       "piece_url": "pieces/cuboRed.txt",
-      "name": "Prisma Triangular Blue",
+      "name": "Cubo",
       "init": {
         "tx": 0.2,
         "ty": 0.4,
@@ -23,7 +23,7 @@
     {
       "id": "triangulo",
       "piece_url": "pieces/prisma.txt",
-      "name": "Prisma Triangular Blue1",
+      "name": "Prisma Triangular Blue",
       "init": {
         "tx": 0.3,
         "ty": 0.4,

@@ -83,6 +83,11 @@ function verify_puzzle() {
 }
 
 function setEventListeners(){
+    $("#next-puzzle").click(function () {
+       var tmp = parseInt(puzzle_id) ;
+       tmp += 1;
+       window.location.href = '/?name=' + tmp.toString();
+    });
 
     $("#next-puzzle").hide();
 

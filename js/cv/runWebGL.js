@@ -1,15 +1,16 @@
 var webgl = null;
+var puzzle_id = null;
 
 function runWebGL() {
-    var name = $.urlParam('name');
+    puzzle_id = $.urlParam('name');
 
-    if(name===null){
-        name = "puzzle1.json";
+    if(puzzle_id===null){
+        puzzle_id = "1";
     }
 
     $.ajax({
         dataType: "json",
-        url: "/puzzles/" + name,
+        url: "/puzzles/puzzle" + puzzle_id + ".json",
         success: function (data) {
             puzzle_definition = data;
             selected_obj_id = puzzle_definition["puzzle_pieces"][0]["id"];
