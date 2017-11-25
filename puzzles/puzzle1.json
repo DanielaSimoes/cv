@@ -1,6 +1,7 @@
 {
   "title": "Puzzle Components",
   "backgroud_url": "img/background.png",
+  "helper_img": "img/puzzle1.png",
   "puzzle_pieces": [
     {
       "id": "cubored",

@@ -17,6 +17,8 @@ function runWebGL() {
             selected_obj_id = puzzle_definition["puzzle_pieces"][0]["id"];
             webgl = new Puzzle(puzzle_definition);
 
+            $("#helper_img").attr("src", puzzle_definition["helper_img"]);
+
             $.ajax({
                 dataType: "json",
                 url: "/puzzles/puzzle" + (parseInt(puzzle_id)+1) + ".json",
