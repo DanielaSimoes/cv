@@ -1,6 +1,6 @@
-var texture, gl, tmp;
+var texture;
 
-function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, globalTz) {
+function Piece(gl, init_pos, vertices, colors, background, sx, sy, sz, globalTz) {
     // web gl object
     this.gl = gl;
 
@@ -13,7 +13,7 @@ function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, glob
                     0.0,  0.0,  1.0
     ];
 
-    computeVertexNormals( this.vertices, this.normals );
+    computeVertexNormals(this.vertices, this.normals);
 
     this.globalTz = globalTz;
     this.globalAngleYY = 0.0;
