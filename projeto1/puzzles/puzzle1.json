@@ -1,0 +1,49 @@
+{
+  "title": "Puzzle Components",
+  "backgroud_url": "img/background.png",
+  "helper_img": "img/puzzle1.png",
+  "puzzle_pieces": [
+    {
+      "id": "cubored",
+      "piece_url": "pieces/cuboRed.txt",
+      "name": "Cubo Vermelho",
+      "init": {
+        "tx": 0.2,
+        "ty": 0.4,
+        "tz": 0,
+        "angleXX": 225,
+        "angleYY": 45,
+        "angleZZ": 45
+      },
+      "end": {
+        "tx": 0.0,
+        "ty": 0.0,
+        "tz": 0,
+        "angleXX": 0,
+        "angleYY": 0,
+        "angleZZ": 0
+      }
+    },
+    {
+      "id": "cubogrey",
+      "piece_url": "pieces/cuboGrey.txt",
+      "name": "Cubo Cinzento",
+      "init": {
+        "tx": -0.2,
+        "ty": 0.2,
+        "tz": 0,
+        "angleXX": 225,
+        "angleYY": 45,
+        "angleZZ": 45
+      },
+      "end": {
+        "tx": -0.1,
+        "ty": 0.0,
+        "tz": 0,
+        "angleXX": 0,
+        "angleYY": 0,
+        "angleZZ": 0
+      }
+    }
+  ]
+}
