@@ -103,12 +103,16 @@ int main( int argc, char** argv )
         switch (op){
             case 1:
                 blur();
-                waitKey(0);
+                waitKey(25);
                 break;
+            case 0:
+                destroyAllWindows();
+                return 0;
             default:
                 printf("\nSelecione um número válida!");
                 break;
         }
+
 
     }
 
