@@ -82,6 +82,8 @@ void menu() {
     printf("2 - Rotação à direita.\n");
     printf("3 - Rotação à esquerda.\n");
     printf("4 - Alteração uniforme das dimensões.\n");
+    printf("5 - Alteração não-uniforme das dimensões.\n");
+    printf("6 - Transformação Afim.\n");
     printf("0 - Sair.\n");
     printf("Opção: ");
     printf("\n-------------------------------------------\n");
@@ -119,11 +121,39 @@ void resizeUniform(int valor){
     imshow("Resize Uniforme", imagemAlterada);
 }
 
+void resizeNotUniform(int largura, int altura){
+    resize(imagemOriginal, imagemAlterada, Size(largura,altura));
+    namedWindow("Resize Não Uniforme", CV_WINDOW_AUTOSIZE);
+    imshow("Resize Não Uniforme", imagemAlterada);
+}
+
+void transformacaoAfim(){
+    Point2f src[3];
+    Point2f dst[3];
+    Mat matTrans;
+
+    src[0] = Point2f(0,0);
+    src[1] = Point2f(imagemOriginal.cols-1, 0);
+    src[2] = Point2f(0, imagemOriginal.rows-1);
+
+    dst[0] = Point2f(imagemOriginal.cols*(float)0.0, imagemOriginal.rows*(float)0.35);
+    dst[1] = Point2f(imagemOriginal.cols*(float)0.85, imagemOriginal.rows*(float)0.25);
+    dst[2] = Point2f(imagemOriginal.cols*(float)0.15, imagemOriginal.rows*(float)0.7);
+
+    matTrans = getAffineTransform(src, dst);
+    warpAffine( imagemOriginal, imagemAlterada, matTrans, imagemAlterada.size());
+
+    namedWindow("Transformação Afim", CV_WINDOW_AUTOSIZE);
+    imshow("Transformação Afim", imagemAlterada);
+}
+
 int main( int argc, char** argv )
 {
     readImage();
     int op;
     int valor;
+    int largura;
+    int altura;
 
     while(true){
         menu();
@@ -150,6 +180,18 @@ int main( int argc, char** argv )
                 printf("Introduza a percentagem: ");
                 cin >> valor;
                 resizeUniform(valor);
+                waitKey(25);
+                break;
+            case 5:
+                printf("Largura: ");
+                cin >> largura;
+                printf("Altura: ");
+                cin >> altura;
+                resizeNotUniform(largura,altura);
+                waitKey(25);
+                break;
+            case 6:
+                transformacaoAfim();
                 waitKey(25);
                 break;
             case 0:
