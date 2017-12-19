@@ -52,10 +52,9 @@ int readImage() {
             if (!op.compare("3")) {
                 string imagem;
                 printf("\n-------------------------------------------\n");
-                printf("Nome da imagem:\n");
-                cin >> imagem;
+                printf("Nome da imagem:");
                 printf("\n-------------------------------------------\n");
-
+                cin >> imagem;
 
                 imagem = "../imagens/" + imagem;
 
@@ -80,21 +79,51 @@ int readImage() {
 void menu() {
     printf("\n--------------------MENU-------------------\n");
     printf("1 - Imagem com Blur.\n");
+    printf("2 - Rotação à direita.\n");
+    printf("3 - Rotação à esquerda.\n");
+    printf("4 - Alteração uniforme das dimensões.\n");
     printf("0 - Sair.\n");
+    printf("Opção: ");
     printf("\n-------------------------------------------\n");
 }
 
 void blur() {
-    imagemAlterada = imagemOriginal.clone();
     medianBlur(imagemOriginal, imagemAlterada, 5);
     namedWindow("Imagem com Blur", CV_WINDOW_AUTOSIZE);
     imshow("Imagem com Blur", imagemAlterada);
+}
+
+void rodarDireita(int angle){
+    Mat matRot;
+    //obter matriz de rotação
+    matRot = getRotationMatrix2D(Point(imagemAlterada.rows / 2, imagemAlterada.cols / 2), angle, 1);
+    //aplica a matriz rotação à imagem
+    warpAffine(imagemOriginal, imagemAlterada, matRot, imagemOriginal.size());
+    namedWindow("Imagem Rodada direita", CV_WINDOW_AUTOSIZE);
+    imshow("Imagem Rodada direita", imagemAlterada);
+}
+
+void rodarEsquerda(int angle){
+    Mat matRot;
+    //obter matriz de rotação
+    matRot = getRotationMatrix2D(Point(imagemAlterada.rows / 2, imagemAlterada.cols / 2), angle, 1);
+    //aplica a matriz rotação à imagem
+    warpAffine(imagemOriginal, imagemAlterada, matRot, imagemOriginal.size());
+    namedWindow("Imagem Rodada Esquerda", CV_WINDOW_AUTOSIZE);
+    imshow("Imagem Rodada Esquerda", imagemAlterada);
+}
+
+void resizeUniform(int valor){
+    resize(imagemOriginal, imagemAlterada, Size((imagemOriginal.size().width * valor) / 100, (imagemOriginal.size().height * valor) / 100));
+    namedWindow("Resize Uniforme", CV_WINDOW_AUTOSIZE);
+    imshow("Resize Uniforme", imagemAlterada);
 }
 
 int main( int argc, char** argv )
 {
     readImage();
     int op;
+    int valor;
 
     while(true){
         menu();
@@ -105,11 +134,29 @@ int main( int argc, char** argv )
                 blur();
                 waitKey(25);
                 break;
+            case 2:
+                printf("Qual o valor da rotação? ");
+                cin >> valor;
+                rodarDireita(valor);
+                waitKey(25);
+                break;
+            case 3:
+                printf("Qual o valor da rotação? ");
+                cin >> valor;
+                rodarEsquerda(-valor);
+                waitKey(25);
+                break;
+            case 4:
+                printf("Introduza a percentagem: ");
+                cin >> valor;
+                resizeUniform(valor);
+                waitKey(25);
+                break;
             case 0:
                 destroyAllWindows();
                 return 0;
             default:
-                printf("\nSelecione um número válida!");
+                printf("\nSelecione um número válido!");
                 break;
         }
 
