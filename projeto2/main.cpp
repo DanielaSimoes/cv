@@ -23,11 +23,12 @@ int readImage() {
         printf("2 - Sair.\n");
         printf("3 - Escolher imagem.\n");
         printf("Opção: ");
-        printf("\n-------------------------------------------\n");
+
 
         string op;
         bool existe = true;
         cin >> op;
+        printf("-------------------------------------------\n");
         if (!op.compare("1")) {
             DIR *dir;
             struct dirent *ent;
@@ -52,10 +53,10 @@ int readImage() {
             if (!op.compare("3")) {
                 string imagem;
                 printf("\n-------------------------------------------\n");
-                printf("Nome da imagem:");
-                printf("\n-------------------------------------------\n");
-                cin >> imagem;
+                printf("Nome da imagem: ");
 
+                cin >> imagem;
+                printf("-------------------------------------------\n");
                 imagem = "../imagens/" + imagem;
 
                 imagemOriginal = cv::imread(imagem, CV_LOAD_IMAGE_UNCHANGED);
@@ -84,9 +85,10 @@ void menu() {
     printf("4 - Alteração uniforme das dimensões.\n");
     printf("5 - Alteração não-uniforme das dimensões.\n");
     printf("6 - Transformação Afim.\n");
+    printf("7 - Dilatação da Imagem.\n");
+    printf("8 - Erosão da Imagem.\n");
     printf("0 - Sair.\n");
     printf("Opção: ");
-    printf("\n-------------------------------------------\n");
 }
 
 void blur() {
@@ -147,6 +149,24 @@ void transformacaoAfim(){
     imshow("Transformação Afim", imagemAlterada);
 }
 
+void dilateImg(int iteracao){
+    Mat element;
+    element = getStructuringElement(MORPH_ELLIPSE, Size(3,3));
+    dilate(imagemOriginal, imagemAlterada, element, Point(-1,-1), iteracao);
+
+    namedWindow("Dilatação da Imagem", CV_WINDOW_AUTOSIZE);
+    imshow("Dilatação da Imagem", imagemAlterada);
+}
+
+void erodeImg(int iteracao){
+    Mat element;
+    element = getStructuringElement(MORPH_ELLIPSE, Size(3,3));
+    erode(imagemOriginal, imagemAlterada, element, Point(-1,-1), iteracao);
+
+    namedWindow("Erosão da Imagem", CV_WINDOW_AUTOSIZE);
+    imshow("Erosão da Imagem", imagemAlterada);
+}
+
 int main( int argc, char** argv )
 {
     readImage();
@@ -158,7 +178,7 @@ int main( int argc, char** argv )
     while(true){
         menu();
         cin >> op;
-
+        printf("-------------------------------------------\n");
         switch (op){
             case 1:
                 blur();
@@ -194,11 +214,23 @@ int main( int argc, char** argv )
                 transformacaoAfim();
                 waitKey(25);
                 break;
+            case 7:
+                printf("Quantas vezes deseja aplicar a dilatação à sua imagem? ");
+                cin >> valor;
+                dilateImg(valor);
+                waitKey(25);
+                break;
+            case 8:
+                printf("Quantas vezes deseja aplicar a erosão à sua imagem? ");
+                cin >> valor;
+                erodeImg(valor);
+                waitKey(25);
+                break;
             case 0:
                 destroyAllWindows();
                 return 0;
             default:
-                printf("\nSelecione um número válido!");
+                printf("Selecione um número válido!");
                 break;
         }
 
