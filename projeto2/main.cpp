@@ -14,6 +14,7 @@ using namespace cv;
 using namespace std;
 
 Mat imagemOriginal, imagemAlterada;
+int alpha_slider = 0;
 
 int readImage() {
     imagemOriginal = NULL;
@@ -149,13 +150,26 @@ void transformacaoAfim(){
     imshow("Transformação Afim", imagemAlterada);
 }
 
-void dilateImg(int iteracao){
+
+void on_trackbarDilate( int, void* )
+{
     Mat element;
     element = getStructuringElement(MORPH_ELLIPSE, Size(3,3));
-    dilate(imagemOriginal, imagemAlterada, element, Point(-1,-1), iteracao);
+    dilate(imagemOriginal, imagemAlterada, element, Point(-1,-1), alpha_slider);
 
-    namedWindow("Dilatação da Imagem", CV_WINDOW_AUTOSIZE);
     imshow("Dilatação da Imagem", imagemAlterada);
+}
+
+void dilateImg(){
+    namedWindow("Dilatação da Imagem", CV_WINDOW_AUTOSIZE);
+
+    char TrackbarName[50];
+    sprintf(TrackbarName, "iteracoes:\n");
+
+    createTrackbar(TrackbarName, "Dilatação da Imagem", &alpha_slider, 10, on_trackbarDilate);
+
+    on_trackbarDilate(alpha_slider, 0);
+
 }
 
 void erodeImg(int iteracao){
@@ -215,10 +229,8 @@ int main( int argc, char** argv )
                 waitKey(25);
                 break;
             case 7:
-                printf("Quantas vezes deseja aplicar a dilatação à sua imagem? ");
-                cin >> valor;
-                dilateImg(valor);
-                waitKey(25);
+                dilateImg();
+                waitKey(0);
                 break;
             case 8:
                 printf("Quantas vezes deseja aplicar a erosão à sua imagem? ");
