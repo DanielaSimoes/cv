@@ -7,6 +7,8 @@
 
 #include "opencv2/highgui/highgui.hpp"
 
+#include "opencv2/photo.hpp"
+
 
 #include <dirent.h>
 
@@ -14,6 +16,7 @@ using namespace cv;
 using namespace std;
 
 Mat imagemOriginal, imagemAlterada;
+
 int alpha_slider = 0;
 
 int readImage() {
@@ -78,6 +81,8 @@ int readImage() {
 
     return 0;
 }
+
+
 void menu() {
     printf("\n--------------------MENU-------------------\n");
     printf("1 - Imagem com Blur.\n");
@@ -88,16 +93,26 @@ void menu() {
     printf("6 - Transformação Afim.\n");
     printf("7 - Dilatação da Imagem.\n");
     printf("8 - Erosão da Imagem.\n");
+    printf("9 - Adicionar moldura de cor.\n");
+    printf("10 - Adicionar moldura pixelada.\n");
+    printf("11 - Colocar imagem a preto e branco.\n");
+    printf("12 - Inverter Preto e Branco.\n");
+    printf("13 - Colocar imagem em forma de pintura.\n");
+    printf("14 - Evidenciar Detalhes.\n");
     printf("0 - Sair.\n");
     printf("Opção: ");
 }
 
+
+//blur
 void blur() {
     medianBlur(imagemOriginal, imagemAlterada, 5);
     namedWindow("Imagem com Blur", CV_WINDOW_AUTOSIZE);
     imshow("Imagem com Blur", imagemAlterada);
 }
 
+
+//rodar imagem à direita
 void rodarDireita(int angle){
     Mat matRot;
     //obter matriz de rotação
@@ -108,6 +123,7 @@ void rodarDireita(int angle){
     imshow("Imagem Rodada direita", imagemAlterada);
 }
 
+//rodar imagem à esquerda
 void rodarEsquerda(int angle){
     Mat matRot;
     //obter matriz de rotação
@@ -118,18 +134,24 @@ void rodarEsquerda(int angle){
     imshow("Imagem Rodada Esquerda", imagemAlterada);
 }
 
+
+//resize Uniforme
 void resizeUniform(int valor){
     resize(imagemOriginal, imagemAlterada, Size((imagemOriginal.size().width * valor) / 100, (imagemOriginal.size().height * valor) / 100));
     namedWindow("Resize Uniforme", CV_WINDOW_AUTOSIZE);
     imshow("Resize Uniforme", imagemAlterada);
 }
 
+
+//resize não uniforme
 void resizeNotUniform(int largura, int altura){
     resize(imagemOriginal, imagemAlterada, Size(largura,altura));
     namedWindow("Resize Não Uniforme", CV_WINDOW_AUTOSIZE);
     imshow("Resize Não Uniforme", imagemAlterada);
 }
 
+
+//transformação afim
 void transformacaoAfim(){
     Point2f src[3];
     Point2f dst[3];
@@ -151,6 +173,7 @@ void transformacaoAfim(){
 }
 
 
+//trackbar para dilatação
 void on_trackbarDilate( int, void* )
 {
     Mat element;
@@ -160,6 +183,7 @@ void on_trackbarDilate( int, void* )
     imshow("Dilatação da Imagem", imagemAlterada);
 }
 
+//dilatação
 void dilateImg(){
     namedWindow("Dilatação da Imagem", CV_WINDOW_AUTOSIZE);
 
@@ -172,6 +196,8 @@ void dilateImg(){
 
 }
 
+
+//erosão
 void erodeImg(int iteracao){
     Mat element;
     element = getStructuringElement(MORPH_ELLIPSE, Size(3,3));
@@ -181,6 +207,110 @@ void erodeImg(int iteracao){
     imshow("Erosão da Imagem", imagemAlterada);
 }
 
+
+//adicionar moldura à imagem
+void moldura(bool border){
+    int top, bottom, left, right;
+    Scalar value;
+    RNG rng(12345);
+    top = (int) (0.1 * imagemOriginal.rows);
+    bottom = (int) (0.1 * imagemOriginal.rows);
+    left = (int) (0.1 * imagemOriginal.cols);
+    right = (int) (0.1 * imagemOriginal.cols);
+    //fazer o random da cor
+    value = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+
+    if (border)
+        copyMakeBorder(imagemOriginal, imagemAlterada, top, bottom, left, right, BORDER_CONSTANT, value);
+    else
+        copyMakeBorder(imagemOriginal, imagemAlterada, top, bottom, left, right, BORDER_REPLICATE, value);
+
+    namedWindow("Imagem com Moldura", CV_WINDOW_AUTOSIZE);
+    imshow("Imagem com Moldura", imagemAlterada);
+}
+
+
+//tornar a imagem a preto e branco
+void blackAndWhite(){
+    //RBG
+    if (imagemOriginal.channels() == 3) {
+        cvtColor(imagemOriginal, imagemAlterada, CV_RGB2GRAY);
+
+        namedWindow("Imagem a Preto e Branco", CV_WINDOW_AUTOSIZE);
+        imshow("Imagem a Preto e Branco", imagemAlterada);
+    }
+    //RGBA
+    else if (imagemOriginal.channels() == 4) {
+        cvtColor(imagemOriginal, imagemAlterada, CV_RGBA2GRAY);
+
+        namedWindow("Imagem a Preto e Branco", CV_WINDOW_AUTOSIZE);
+        imshow("Imagem a Preto e Branco", imagemAlterada);
+    }
+    //BLACK AND WHITE
+    else
+        printf("\n Escolha uma imagem a cores!\n");
+}
+
+//inverter preto e branco da imagem
+void invertBlackAndWhite(){
+    //RBG
+    if (imagemOriginal.channels() == 3) {
+
+        cvtColor(imagemOriginal, imagemAlterada, CV_RGB2GRAY);
+
+        bitwise_not(imagemAlterada, imagemAlterada);
+
+        namedWindow("Preto e Branco Invertido", CV_WINDOW_AUTOSIZE);
+        imshow("Preto e Branco Invertido", imagemAlterada);
+    }
+        //RGBA
+    else if (imagemOriginal.channels() == 4) {
+
+        cvtColor(imagemOriginal, imagemAlterada, CV_RGBA2GRAY);
+
+        bitwise_not(imagemAlterada, imagemAlterada);
+
+        namedWindow("Preto e Branco Invertido", CV_WINDOW_AUTOSIZE);
+        imshow("Preto e Branco Invertido", imagemAlterada);
+    }
+        //BLACK AND WHITE
+    else
+        bitwise_not(imagemOriginal, imagemAlterada);
+
+        namedWindow("Preto e Branco Invertido", CV_WINDOW_AUTOSIZE);
+        imshow("Preto e Branco Invertido", imagemAlterada);
+}
+
+//tornar a imagem parecida a uma pintura
+void painting(){
+    stylization(imagemOriginal, imagemAlterada);
+
+    namedWindow("Pintura", CV_WINDOW_AUTOSIZE);
+    imshow("Pintura", imagemAlterada);
+}
+
+//melhorar os detalhes da imagem
+void details(){
+    //RBG
+    if (imagemOriginal.channels() == 3) {
+        detailEnhance(imagemOriginal, imagemAlterada);
+
+        namedWindow("Detalhes Melhorados", CV_WINDOW_AUTOSIZE);
+        imshow("Detalhes Melhorados", imagemAlterada);
+    }
+        //RGBA
+    else if (imagemOriginal.channels() == 4) {
+        detailEnhance(imagemOriginal, imagemAlterada);
+
+        namedWindow("Detalhes Melhorados", CV_WINDOW_AUTOSIZE);
+        imshow("Detalhes Melhorados", imagemAlterada);
+    }
+        //BLACK AND WHITE
+    else
+        printf("\n Escolha uma imagem a cores!\n");
+}
+
+
 int main( int argc, char** argv )
 {
     readImage();
@@ -188,6 +318,7 @@ int main( int argc, char** argv )
     int valor;
     int largura;
     int altura;
+    bool cor;
 
     while(true){
         menu();
@@ -236,6 +367,32 @@ int main( int argc, char** argv )
                 printf("Quantas vezes deseja aplicar a erosão à sua imagem? ");
                 cin >> valor;
                 erodeImg(valor);
+                waitKey(25);
+                break;
+            case 9:
+                cor = true;
+                moldura(cor);
+                waitKey(25);
+                break;
+            case 10:
+                cor = false;
+                moldura(cor);
+                waitKey(25);
+                break;
+            case 11:
+                blackAndWhite();
+                waitKey(25);
+                break;
+            case 12:
+                invertBlackAndWhite();
+                waitKey(25);
+                break;
+            case 13:
+                painting();
+                waitKey(25);
+                break;
+            case 14:
+                details();
                 waitKey(25);
                 break;
             case 0:
