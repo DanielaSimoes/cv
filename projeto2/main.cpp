@@ -9,7 +9,6 @@
 
 #include "opencv2/photo.hpp"
 
-
 #include <dirent.h>
 
 using namespace cv;
@@ -100,6 +99,7 @@ void menu() {
     printf("13 - Colocar imagem em forma de pintura.\n");
     printf("14 - Evidenciar Detalhes.\n");
     printf("15 - Inverter Transformação Afim.\n");
+    printf("16 - Prespectiva.\n");
     printf("0 - Sair.\n");
     printf("Opção: ");
 }
@@ -189,7 +189,7 @@ void dilateImg(){
     namedWindow("Dilatação da Imagem", CV_WINDOW_AUTOSIZE);
 
     char TrackbarName[50];
-    sprintf(TrackbarName, "iteracoes:\n");
+    sprintf(TrackbarName, "Intensidade:\n");
 
     createTrackbar(TrackbarName, "Dilatação da Imagem", &alpha_slider, 10, on_trackbarDilate);
 
@@ -197,17 +197,27 @@ void dilateImg(){
 
 }
 
-
-//erosão
-void erodeImg(int iteracao){
+void on_trackbarErode( int, void* )
+{
     Mat element;
     element = getStructuringElement(MORPH_ELLIPSE, Size(3,3));
-    erode(imagemOriginal, imagemAlterada, element, Point(-1,-1), iteracao);
+    erode(imagemOriginal, imagemAlterada, element, Point(-1,-1), alpha_slider);
 
-    namedWindow("Erosão da Imagem", CV_WINDOW_AUTOSIZE);
+
     imshow("Erosão da Imagem", imagemAlterada);
 }
 
+//erosão
+void erodeImg(){
+    namedWindow("Erosão da Imagem", CV_WINDOW_AUTOSIZE);
+
+    char TrackbarName[50];
+    sprintf(TrackbarName, "Intensidade:\n");
+
+    createTrackbar(TrackbarName, "Erosão da Imagem", &alpha_slider, 10, on_trackbarErode);
+
+    on_trackbarErode(alpha_slider, 0);
+}
 
 //adicionar moldura à imagem
 void moldura(bool border){
@@ -334,8 +344,89 @@ void inverttransformacaoAfim(){
 }
 
 
-int main( int argc, char** argv )
-{
+//perspetiva
+void perspective(){
+    vector<vector<Point>> contours;
+    vector<Vec4i> hierarchy;
+    //RBG
+    if (imagemOriginal.channels() == 3) {
+        cvtColor(imagemOriginal, imagemAlterada, CV_RGB2GRAY);
+        GaussianBlur(imagemAlterada, imagemAlterada,Size(5,5), 0, 0);
+        Canny(imagemAlterada,  imagemAlterada, 75, 110);
+        findContours( imagemAlterada, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+        Point2f src[4];
+        Point2f dst[4];
+        Mat matTrans;
+
+        src[0] = Point2f(-90,-40 );
+        src[1] = Point2f(imagemOriginal.cols+50,-100);
+        src[2] = Point2f(imagemOriginal.cols+100,imagemOriginal.rows+90);
+        src[3] = Point2f(-60,imagemOriginal.rows+200);
+
+        dst[0] = Point2f( 0,0 );
+        dst[1] = Point2f(imagemOriginal.cols -1, 0);
+        dst[2] = Point2f(imagemOriginal.cols -1, imagemOriginal.rows - 1);
+        dst[3] = Point2f(0, imagemOriginal.rows - 1);
+
+
+        matTrans = getPerspectiveTransform(src, dst);
+        warpPerspective(imagemOriginal, imagemAlterada, matTrans, imagemOriginal.size());
+
+        namedWindow("Perspetiva", CV_WINDOW_AUTOSIZE);
+        imshow("Perspetiva", imagemAlterada);
+
+    }
+        //RGBA
+    else if (imagemOriginal.channels() == 4) {
+        Point2f src[4];
+        Point2f dst[4];
+        Mat matTrans;
+
+        src[0] = Point2f(-90,-40 );
+        src[1] = Point2f(imagemOriginal.cols+50,-100);
+        src[2] = Point2f(imagemOriginal.cols+100,imagemOriginal.rows+90);
+        src[3] = Point2f(-60,imagemOriginal.rows+200);
+
+        dst[0] = Point2f( 0,0 );
+        dst[1] = Point2f(imagemOriginal.cols -1, 0);
+        dst[2] = Point2f(imagemOriginal.cols -1, imagemOriginal.rows - 1);
+        dst[3] = Point2f(0, imagemOriginal.rows - 1);
+
+
+        matTrans = getPerspectiveTransform(src, dst);
+        warpPerspective(imagemOriginal, imagemAlterada, matTrans, imagemOriginal.size());
+
+        namedWindow("Perspetiva", CV_WINDOW_AUTOSIZE);
+        imshow("Perspetiva", imagemAlterada);
+
+    }
+        //BLACK AND WHITE
+    else {
+        Point2f src[4];
+        Point2f dst[4];
+        Mat matTrans;
+
+        src[0] = Point2f(-90,-40 );
+        src[1] = Point2f(imagemOriginal.cols+50,-100);
+        src[2] = Point2f(imagemOriginal.cols+100,imagemOriginal.rows+90);
+        src[3] = Point2f(-60,imagemOriginal.rows+200);
+
+        dst[0] = Point2f( 0,0 );
+        dst[1] = Point2f(imagemOriginal.cols -1, 0);
+        dst[2] = Point2f(imagemOriginal.cols -1, imagemOriginal.rows - 1);
+        dst[3] = Point2f(0, imagemOriginal.rows - 1);
+
+        matTrans = getPerspectiveTransform(src, dst);
+        warpPerspective(imagemOriginal, imagemAlterada, matTrans, imagemOriginal.size());
+
+        namedWindow("Perspetiva", CV_WINDOW_AUTOSIZE);
+        imshow("Perspetiva", imagemAlterada);
+    }
+
+}
+
+
+int main( int argc, char** argv ) {
     readImage();
     int op;
     int valor;
@@ -343,11 +434,11 @@ int main( int argc, char** argv )
     int altura;
     bool cor;
 
-    while(true){
+    while (true) {
         menu();
         cin >> op;
         printf("-------------------------------------------\n");
-        switch (op){
+        switch (op) {
             case 1:
                 blur();
                 waitKey(25);
@@ -375,7 +466,7 @@ int main( int argc, char** argv )
                 cin >> largura;
                 printf("Altura: ");
                 cin >> altura;
-                resizeNotUniform(largura,altura);
+                resizeNotUniform(largura, altura);
                 waitKey(25);
                 break;
             case 6:
@@ -387,10 +478,8 @@ int main( int argc, char** argv )
                 waitKey(0);
                 break;
             case 8:
-                printf("Quantas vezes deseja aplicar a erosão à sua imagem? ");
-                cin >> valor;
-                erodeImg(valor);
-                waitKey(25);
+                erodeImg();
+                waitKey(0);
                 break;
             case 9:
                 cor = true;
@@ -422,6 +511,10 @@ int main( int argc, char** argv )
                 inverttransformacaoAfim();
                 waitKey(25);
                 break;
+            case 16:
+                perspective();
+                waitKey(25);
+                break;
             case 0:
                 destroyAllWindows();
                 return 0;
@@ -437,3 +530,4 @@ int main( int argc, char** argv )
     return 0;
 
 }
+
