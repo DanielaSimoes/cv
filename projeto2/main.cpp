@@ -99,6 +99,7 @@ void menu() {
     printf("12 - Inverter Preto e Branco.\n");
     printf("13 - Colocar imagem em forma de pintura.\n");
     printf("14 - Evidenciar Detalhes.\n");
+    printf("15 - Inverter Transformação Afim.\n");
     printf("0 - Sair.\n");
     printf("Opção: ");
 }
@@ -310,6 +311,28 @@ void details(){
         printf("\n Escolha uma imagem a cores!\n");
 }
 
+//inverter transformação afim
+void inverttransformacaoAfim(){
+    Point2f src[3];
+    Point2f dst[3];
+    Mat matTrans;
+
+    src[0] = Point2f(0,0);
+    src[1] = Point2f(imagemOriginal.cols-1, 0);
+    src[2] = Point2f(0, imagemOriginal.rows-1);
+
+    dst[0] = Point2f(imagemOriginal.cols*(float)0.0, imagemOriginal.rows*(float)0.35);
+    dst[1] = Point2f(imagemOriginal.cols*(float)0.85, imagemOriginal.rows*(float)0.25);
+    dst[2] = Point2f(imagemOriginal.cols*(float)0.15, imagemOriginal.rows*(float)0.7);
+
+    matTrans = getAffineTransform(src, dst);
+    invertAffineTransform(matTrans, matTrans);
+    warpAffine(imagemOriginal, imagemAlterada, matTrans, imagemAlterada.size());
+
+    namedWindow("Inversão da Transformação Afim", CV_WINDOW_AUTOSIZE);
+    imshow("Inversão da Transformação Afim", imagemAlterada);
+}
+
 
 int main( int argc, char** argv )
 {
@@ -393,6 +416,10 @@ int main( int argc, char** argv )
                 break;
             case 14:
                 details();
+                waitKey(25);
+                break;
+            case 15:
+                inverttransformacaoAfim();
                 waitKey(25);
                 break;
             case 0:
