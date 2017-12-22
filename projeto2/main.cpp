@@ -513,7 +513,7 @@ int main( int argc, char** argv ) {
                 break;
             case 2:
                 rodarDireita();
-                waitKey(0);
+                waitKey(10000);
                 printf("Deseja guardar a imagem? [s/n]");
                 cin >> val;
                 if (val=='s')
@@ -523,7 +523,7 @@ int main( int argc, char** argv ) {
                 break;
             case 3:
                 rodarEsquerda();
-                waitKey(0);
+                waitKey(10000);
                 printf("Deseja guardar a imagem? [s/n]");
                 cin >> val;
                 if (val=='s')
@@ -569,7 +569,7 @@ int main( int argc, char** argv ) {
                 break;
             case 7:
                 dilateImg();
-                waitKey(0);
+                waitKey(10000);
                 printf("Deseja guardar a imagem? [s/n]");
                 cin >> val;
                 if (val=='s')
@@ -579,7 +579,7 @@ int main( int argc, char** argv ) {
                 break;
             case 8:
                 erodeImg();
-                waitKey(0);
+                waitKey(10000);
                 printf("Deseja guardar a imagem? [s/n]");
                 cin >> val;
                 if (val=='s')
