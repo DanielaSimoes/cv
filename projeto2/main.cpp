@@ -425,9 +425,45 @@ void perspective(){
 
 }
 
+string verifyExists(string nome) {
+    Mat imagem;
+    char val;
+    do {
+        string novaImagem = "../imagens/" + nome;
+
+        imagem = imread(novaImagem, CV_LOAD_IMAGE_UNCHANGED);
+        if (imagem.data) {
+            printf("Deseja substituir? [s/n]:");
+            cin >> val;
+            if (val == 's') {
+                return nome;
+            }
+            else{
+                printf("Novo nome: ");
+                cin >> nome;
+                nome += ".jpg";
+            }
+        }
+        else {
+            return nome;
+        }
+    } while (imagem.data);
+    return nome;
+}
+
+void saveImg(){
+    string nome;
+    printf("Nome: ");
+    cin >> nome;
+    nome += ".jpg";
+    nome = verifyExists(nome);
+    imwrite("../imagens/" + nome, imagemAlterada);
+}
+
 
 int main( int argc, char** argv ) {
     readImage();
+    char val;
     int op;
     int valor;
     int largura;
@@ -442,24 +478,48 @@ int main( int argc, char** argv ) {
             case 1:
                 blur();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 2:
                 printf("Qual o valor da rotação? ");
                 cin >> valor;
                 rodarDireita(valor);
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 3:
                 printf("Qual o valor da rotação? ");
                 cin >> valor;
                 rodarEsquerda(-valor);
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 4:
                 printf("Introduza a percentagem: ");
                 cin >> valor;
                 resizeUniform(valor);
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 5:
                 printf("Largura: ");
@@ -468,52 +528,124 @@ int main( int argc, char** argv ) {
                 cin >> altura;
                 resizeNotUniform(largura, altura);
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 6:
                 transformacaoAfim();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 7:
                 dilateImg();
                 waitKey(0);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 8:
                 erodeImg();
                 waitKey(0);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 9:
                 cor = true;
                 moldura(cor);
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 10:
                 cor = false;
                 moldura(cor);
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 11:
                 blackAndWhite();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 12:
                 invertBlackAndWhite();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 13:
                 painting();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 14:
                 details();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 15:
                 inverttransformacaoAfim();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 16:
                 perspective();
                 waitKey(25);
+                printf("Deseja guardar a imagem? [s/n]");
+                cin >> val;
+                if (val=='s')
+                    saveImg();
+                else
+                    break;
                 break;
             case 0:
                 destroyAllWindows();
