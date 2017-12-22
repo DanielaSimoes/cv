@@ -104,7 +104,6 @@ void menu() {
     printf("Opção: ");
 }
 
-
 //blur
 void blur() {
     medianBlur(imagemOriginal, imagemAlterada, 5);
@@ -112,27 +111,53 @@ void blur() {
     imshow("Imagem com Blur", imagemAlterada);
 }
 
-
-//rodar imagem à direita
-void rodarDireita(int angle){
+//trackbar para rodarDireita
+void on_trackbarRodarDireita( int, void* )
+{
     Mat matRot;
     //obter matriz de rotação
-    matRot = getRotationMatrix2D(Point(imagemAlterada.rows / 2, imagemAlterada.cols / 2), angle, 1);
+    matRot = getRotationMatrix2D(Point(imagemAlterada.rows / 2, imagemAlterada.cols / 2), alpha_slider, 1);
     //aplica a matriz rotação à imagem
     warpAffine(imagemOriginal, imagemAlterada, matRot, imagemOriginal.size());
-    namedWindow("Imagem Rodada direita", CV_WINDOW_AUTOSIZE);
+
     imshow("Imagem Rodada direita", imagemAlterada);
 }
 
-//rodar imagem à esquerda
-void rodarEsquerda(int angle){
+//rodar imagem à direita
+void rodarDireita(){
+    namedWindow("Imagem Rodada direita", CV_WINDOW_AUTOSIZE);
+
+    char TrackbarName[50];
+    sprintf(TrackbarName, "Intensidade:\n");
+
+    createTrackbar(TrackbarName, "Imagem Rodada direita", &alpha_slider, 360, on_trackbarRodarDireita);
+
+    on_trackbarRodarDireita(alpha_slider, 0);
+}
+
+//trackbar para esquerda
+void on_trackbarRodarEsquerda( int, void* )
+{
     Mat matRot;
     //obter matriz de rotação
-    matRot = getRotationMatrix2D(Point(imagemAlterada.rows / 2, imagemAlterada.cols / 2), angle, 1);
+    matRot = getRotationMatrix2D(Point(imagemAlterada.rows / 2, imagemAlterada.cols / 2), -alpha_slider, 1);
     //aplica a matriz rotação à imagem
     warpAffine(imagemOriginal, imagemAlterada, matRot, imagemOriginal.size());
-    namedWindow("Imagem Rodada Esquerda", CV_WINDOW_AUTOSIZE);
+
     imshow("Imagem Rodada Esquerda", imagemAlterada);
+}
+
+//rodar imagem à esquerda
+void rodarEsquerda(){
+    namedWindow("Imagem Rodada Esquerda", CV_WINDOW_AUTOSIZE);
+
+    char TrackbarName[50];
+    sprintf(TrackbarName, "Intensidade:\n");
+
+    createTrackbar(TrackbarName, "Imagem Rodada Esquerda", &alpha_slider, 360, on_trackbarRodarEsquerda);
+
+    on_trackbarRodarEsquerda(alpha_slider, 0);
+
 }
 
 
@@ -197,6 +222,7 @@ void dilateImg(){
 
 }
 
+//trackbar para erosão
 void on_trackbarErode( int, void* )
 {
     Mat element;
@@ -486,10 +512,8 @@ int main( int argc, char** argv ) {
                     break;
                 break;
             case 2:
-                printf("Qual o valor da rotação? ");
-                cin >> valor;
-                rodarDireita(valor);
-                waitKey(25);
+                rodarDireita();
+                waitKey(0);
                 printf("Deseja guardar a imagem? [s/n]");
                 cin >> val;
                 if (val=='s')
@@ -498,10 +522,8 @@ int main( int argc, char** argv ) {
                     break;
                 break;
             case 3:
-                printf("Qual o valor da rotação? ");
-                cin >> valor;
-                rodarEsquerda(-valor);
-                waitKey(25);
+                rodarEsquerda();
+                waitKey(0);
                 printf("Deseja guardar a imagem? [s/n]");
                 cin >> val;
                 if (val=='s')
