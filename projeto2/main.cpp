@@ -99,7 +99,6 @@ void menu() {
     printf("13 - Colocar imagem em forma de pintura.\n");
     printf("14 - Evidenciar Detalhes.\n");
     printf("15 - Inverter Transformação Afim.\n");
-    printf("16 - Prespectiva.\n");
     printf("0 - Sair.\n");
     printf("Opção: ");
 }
@@ -369,88 +368,6 @@ void inverttransformacaoAfim(){
     imshow("Inversão da Transformação Afim", imagemAlterada);
 }
 
-
-//perspetiva
-void perspective(){
-    vector<vector<Point>> contours;
-    vector<Vec4i> hierarchy;
-    //RBG
-    if (imagemOriginal.channels() == 3) {
-        cvtColor(imagemOriginal, imagemAlterada, CV_RGB2GRAY);
-        GaussianBlur(imagemAlterada, imagemAlterada,Size(5,5), 0, 0);
-        Canny(imagemAlterada,  imagemAlterada, 75, 110);
-        findContours( imagemAlterada, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-        Point2f src[4];
-        Point2f dst[4];
-        Mat matTrans;
-
-        src[0] = Point2f(-90,-40 );
-        src[1] = Point2f(imagemOriginal.cols+50,-100);
-        src[2] = Point2f(imagemOriginal.cols+100,imagemOriginal.rows+90);
-        src[3] = Point2f(-60,imagemOriginal.rows+200);
-
-        dst[0] = Point2f( 0,0 );
-        dst[1] = Point2f(imagemOriginal.cols -1, 0);
-        dst[2] = Point2f(imagemOriginal.cols -1, imagemOriginal.rows - 1);
-        dst[3] = Point2f(0, imagemOriginal.rows - 1);
-
-
-        matTrans = getPerspectiveTransform(src, dst);
-        warpPerspective(imagemOriginal, imagemAlterada, matTrans, imagemOriginal.size());
-
-        namedWindow("Perspetiva", CV_WINDOW_AUTOSIZE);
-        imshow("Perspetiva", imagemAlterada);
-
-    }
-        //RGBA
-    else if (imagemOriginal.channels() == 4) {
-        Point2f src[4];
-        Point2f dst[4];
-        Mat matTrans;
-
-        src[0] = Point2f(-90,-40 );
-        src[1] = Point2f(imagemOriginal.cols+50,-100);
-        src[2] = Point2f(imagemOriginal.cols+100,imagemOriginal.rows+90);
-        src[3] = Point2f(-60,imagemOriginal.rows+200);
-
-        dst[0] = Point2f( 0,0 );
-        dst[1] = Point2f(imagemOriginal.cols -1, 0);
-        dst[2] = Point2f(imagemOriginal.cols -1, imagemOriginal.rows - 1);
-        dst[3] = Point2f(0, imagemOriginal.rows - 1);
-
-
-        matTrans = getPerspectiveTransform(src, dst);
-        warpPerspective(imagemOriginal, imagemAlterada, matTrans, imagemOriginal.size());
-
-        namedWindow("Perspetiva", CV_WINDOW_AUTOSIZE);
-        imshow("Perspetiva", imagemAlterada);
-
-    }
-        //BLACK AND WHITE
-    else {
-        Point2f src[4];
-        Point2f dst[4];
-        Mat matTrans;
-
-        src[0] = Point2f(-90,-40 );
-        src[1] = Point2f(imagemOriginal.cols+50,-100);
-        src[2] = Point2f(imagemOriginal.cols+100,imagemOriginal.rows+90);
-        src[3] = Point2f(-60,imagemOriginal.rows+200);
-
-        dst[0] = Point2f( 0,0 );
-        dst[1] = Point2f(imagemOriginal.cols -1, 0);
-        dst[2] = Point2f(imagemOriginal.cols -1, imagemOriginal.rows - 1);
-        dst[3] = Point2f(0, imagemOriginal.rows - 1);
-
-        matTrans = getPerspectiveTransform(src, dst);
-        warpPerspective(imagemOriginal, imagemAlterada, matTrans, imagemOriginal.size());
-
-        namedWindow("Perspetiva", CV_WINDOW_AUTOSIZE);
-        imshow("Perspetiva", imagemAlterada);
-    }
-
-}
-
 string verifyExists(string nome) {
     Mat imagem;
     char val;
@@ -651,16 +568,6 @@ int main( int argc, char** argv ) {
                 break;
             case 15:
                 inverttransformacaoAfim();
-                waitKey(25);
-                printf("Deseja guardar a imagem? [s/n]");
-                cin >> val;
-                if (val=='s')
-                    saveImg();
-                else
-                    break;
-                break;
-            case 16:
-                perspective();
                 waitKey(25);
                 printf("Deseja guardar a imagem? [s/n]");
                 cin >> val;
