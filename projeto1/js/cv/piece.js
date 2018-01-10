@@ -1,6 +1,6 @@
-var texture;
+var texture, gl, tmp;
 
-function Piece(gl, init_pos, vertices, colors, background, sx, sy, sz, globalTz) {
+function Piece(gl, init_pos, pos, vertices, colors, background, sx, sy, sz, globalTz) {
     // web gl object
     this.gl = gl;
 

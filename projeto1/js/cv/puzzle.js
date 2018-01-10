@@ -86,7 +86,7 @@ Puzzle.prototype.initBackground = function(){
         "angleZZ": 0
     };
 
-	this.background = new Piece(this.gl, init_pos, result["vertices"].slice(), [], true, this.sx, this.sy, this.sz, this.globalTz);
+	this.background = new Piece(this.gl, init_pos, 0, result["vertices"].slice(), [], true, this.sx, this.sy, this.sz, this.globalTz);
 };
 
 // WebGL Initialization
